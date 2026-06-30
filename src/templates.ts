@@ -21,7 +21,7 @@ export const templates: CardTemplate[] = [
     foreground: "#093c4a",
     accent: "#ffe23b",
     muted: "#9fd4e6",
-    fontFamily: '"PingFang SC", "Microsoft YaHei", sans-serif',
+    fontFamily: '"ZCOOL XiaoWei", "PingFang SC", "Microsoft YaHei", sans-serif',
     fontWeight: 800,
     radius: 54,
     textBox: { ...baseBox, y: 290, maxFontSize: 88, maxLines: 6 },
@@ -34,7 +34,7 @@ export const templates: CardTemplate[] = [
     foreground: "#202018",
     accent: "#ff6b35",
     muted: "#d8b94f",
-    fontFamily: '"PingFang SC", "Microsoft YaHei", sans-serif',
+    fontFamily: '"Ma Shan Zheng", "PingFang SC", "Microsoft YaHei", sans-serif',
     fontWeight: 750,
     radius: 28,
     textBox: { ...baseBox, x: 90, y: 245, width: 720, maxFontSize: 82 },
@@ -47,7 +47,7 @@ export const templates: CardTemplate[] = [
     foreground: "#101010",
     accent: "#ef4136",
     muted: "#b6b1a8",
-    fontFamily: '"Songti SC", "Noto Serif SC", serif',
+    fontFamily: '"ZCOOL KuaiLe", "Songti SC", "Noto Serif SC", serif',
     fontWeight: 800,
     radius: 0,
     textBox: {
@@ -69,7 +69,7 @@ export const templates: CardTemplate[] = [
     foreground: "#30245f",
     accent: "#8f68ff",
     muted: "#c7b9f5",
-    fontFamily: '"PingFang SC", "Microsoft YaHei", sans-serif',
+    fontFamily: '"Long Cang", "PingFang SC", "Microsoft YaHei", sans-serif',
     fontWeight: 760,
     radius: 72,
     textBox: {
@@ -90,7 +90,7 @@ export const templates: CardTemplate[] = [
     foreground: "#23452e",
     accent: "#ff7a59",
     muted: "#a8c69c",
-    fontFamily: '"PingFang SC", "Microsoft YaHei", sans-serif',
+    fontFamily: '"ZCOOL QingKe HuangYou", "PingFang SC", "Microsoft YaHei", sans-serif',
     fontWeight: 760,
     radius: 42,
     textBox: {
@@ -112,7 +112,7 @@ export const templates: CardTemplate[] = [
     foreground: "#7d201b",
     accent: "#e83a2f",
     muted: "#e0a298",
-    fontFamily: '"Songti SC", "Noto Serif SC", serif',
+    fontFamily: '"Long Cang", "Songti SC", "Noto Serif SC", serif',
     fontWeight: 900,
     radius: 24,
     textBox: {
@@ -134,7 +134,7 @@ export const templates: CardTemplate[] = [
     foreground: "#173f7a",
     accent: "#3978ff",
     muted: "#b8cff5",
-    fontFamily: '"PingFang SC", "Microsoft YaHei", sans-serif',
+    fontFamily: '"ZCOOL XiaoWei", "PingFang SC", "Microsoft YaHei", sans-serif',
     fontWeight: 780,
     radius: 40,
     textBox: {
@@ -155,7 +155,7 @@ export const templates: CardTemplate[] = [
     foreground: "#f6f1d8",
     accent: "#ffcc4d",
     muted: "#6a7399",
-    fontFamily: '"PingFang SC", "Microsoft YaHei", sans-serif',
+    fontFamily: '"ZCOOL QingKe HuangYou", "PingFang SC", "Microsoft YaHei", sans-serif',
     fontWeight: 740,
     radius: 58,
     textBox: {
@@ -176,7 +176,7 @@ export const templates: CardTemplate[] = [
     foreground: "#2b1710",
     accent: "#fff3cf",
     muted: "#ffb07e",
-    fontFamily: '"PingFang SC", "Microsoft YaHei", sans-serif',
+    fontFamily: '"Ma Shan Zheng", "PingFang SC", "Microsoft YaHei", sans-serif',
     fontWeight: 900,
     radius: 46,
     textBox: {
@@ -198,7 +198,7 @@ export const templates: CardTemplate[] = [
     foreground: "#3a3128",
     accent: "#315d4f",
     muted: "#c9bead",
-    fontFamily: '"Songti SC", "Noto Serif SC", serif',
+    fontFamily: '"Long Cang", "Songti SC", "Noto Serif SC", serif',
     fontWeight: 700,
     radius: 18,
     textBox: {
@@ -220,7 +220,7 @@ export const templates: CardTemplate[] = [
     foreground: "#61253c",
     accent: "#ff5790",
     muted: "#efb7cb",
-    fontFamily: '"PingFang SC", "Microsoft YaHei", sans-serif',
+    fontFamily: '"Long Cang", "PingFang SC", "Microsoft YaHei", sans-serif',
     fontWeight: 790,
     radius: 76,
     textBox: {
@@ -241,7 +241,7 @@ export const templates: CardTemplate[] = [
     foreground: "#181818",
     accent: "#181818",
     muted: "#d9d9d9",
-    fontFamily: '"PingFang SC", "Microsoft YaHei", sans-serif',
+    fontFamily: '"ZCOOL KuaiLe", "PingFang SC", "Microsoft YaHei", sans-serif',
     fontWeight: 700,
     radius: 12,
     frame: "#181818",
