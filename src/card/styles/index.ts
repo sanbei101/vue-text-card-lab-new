@@ -1,5 +1,6 @@
 import type { Component } from "vue";
 
+import type { TemplateKind } from "../../types";
 import BubbleCard from "./BubbleCard.vue";
 import BurstCard from "./BurstCard.vue";
 import EditorialCard from "./EditorialCard.vue";
@@ -12,7 +13,6 @@ import NotebookCard from "./NotebookCard.vue";
 import PaperCard from "./PaperCard.vue";
 import QuestionCard from "./QuestionCard.vue";
 import StampCard from "./StampCard.vue";
-import type { TemplateKind } from "../../types";
 
 export const kindToComponent: Record<TemplateKind, Component> = {
   question: QuestionCard,

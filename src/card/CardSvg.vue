@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import { kindToComponent } from "./styles";
 import type { CardTemplate } from "../types";
+import { kindToComponent } from "./styles";
 
 const props = defineProps<{ template: CardTemplate; title: string; keyword: string }>();
 

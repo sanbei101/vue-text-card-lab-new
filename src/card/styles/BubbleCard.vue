@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useCardRender } from "../composables/useCardRender";
+import type { CardTemplate } from "../../types";
+import CardSignature from "../components/CardSignature.vue";
 import HighlightLayer from "../components/HighlightLayer.vue";
 import MainText from "../components/MainText.vue";
-import CardSignature from "../components/CardSignature.vue";
-import type { CardTemplate } from "../../types";
+import { useCardRender } from "../composables/useCardRender";
 
 const props = defineProps<{ template: CardTemplate; title: string; keyword: string }>();
 const { layout, highlights, textX, textAnchor } = useCardRender(props);

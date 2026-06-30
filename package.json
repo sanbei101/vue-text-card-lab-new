@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "fmt": "oxfmt",
-    "lint": "oxlint"
+    "lint": "eslint"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.1",
@@ -15,9 +15,10 @@
     "vue": "^3.5.39"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^9.1.0",
     "@vitejs/plugin-vue": "^6.0.7",
+    "eslint": "^10.6.0",
     "oxfmt": "^0.56.0",
-    "oxlint": "^1.71.0",
     "oxlint-tsgolint": "^0.23.0",
     "typescript": "~6.0.3",
     "vite": "^8.1.0",

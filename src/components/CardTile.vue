@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import type { CardTemplate } from "../types";
 import CardSvg from "../card/CardSvg.vue";
+import type { CardTemplate } from "../types";
 
-const props = defineProps<{
+const {
+  template,
+  title,
+  keyword,
+} = defineProps<{
   template: CardTemplate;
   title: string;
   keyword: string;
