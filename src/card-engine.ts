@@ -91,7 +91,7 @@ function linePenalty(line: string, lineWidth: number, maxWidth: number, isLast: 
   const fill = lineWidth / maxWidth;
 
   // 非末行更强调视觉均衡，末行允许短一些。
-  penalty += isLast ? Math.pow(Math.max(0, 0.72 - fill), 2) * 520 : Math.pow(1 - fill, 2) * 820;
+  penalty += isLast ? Math.max(0, 0.72 - fill) ** 2 * 520 : (1 - fill) ** 2 * 820;
 
   if (BAD_LINE_START.has(first)) penalty += 1600;
 
@@ -175,7 +175,7 @@ function layoutAtSize(rawText: string, fontSize: number, template: CardTemplate)
 
     if (cost == null || !path) continue;
 
-    const lineCountPenalty = Math.pow(lineCount - Math.min(4, maxLines), 2) * 18;
+    const lineCountPenalty = (lineCount - Math.min(4, maxLines)) ** 2 * 18;
 
     const totalCost = cost + lineCountPenalty;
 
