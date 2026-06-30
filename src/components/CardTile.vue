@@ -15,11 +15,8 @@ const emit = defineEmits<{
 
 <template>
   <article
-    class="overflow-hidden rounded-3xl border border-zinc-300 bg-white shadow-[0_10px_35px_rgb(0_0_0/4%)] transition-[transform,box-shadow] duration-150 hover:-translate-y-0.75 hover:shadow-[0_18px_50px_rgb(0_0_0/9%)]"
-  >
-    <div
-      class="bg-[linear-gradient(45deg,#f5f5f5_25%,transparent_25%)_0_0/18px_18px,linear-gradient(45deg,transparent_75%,#f5f5f5_75%)_0_0/18px_18px,linear-gradient(45deg,transparent_75%,#f5f5f5_75%)_9px_-9px/18px_18px,linear-gradient(45deg,#f5f5f5_25%,#fff_25%)_9px_-9px/18px_18px] p-3.5"
-    >
+    class="overflow-hidden rounded-3xl border border-zinc-300 bg-white shadow-md transition-[transform,box-shadow] duration-150 hover:-translate-y-0.75 hover:shadow-[0_18px_50px_rgb(0_0_0/9%)]">
+    <div class="checkerboard-bg p-3.5">
       <CardSvg :template="template" :title="title" :keyword="keyword" />
     </div>
 
@@ -29,13 +26,21 @@ const emit = defineEmits<{
         <span class="text-xs text-zinc-400 uppercase">{{ template.kind }}</span>
       </div>
 
-      <button
-        type="button"
+      <button type="button"
         class="shrink-0 cursor-pointer rounded-[10px] border border-zinc-300 bg-white px-3 py-2.25 text-[13px] font-bold text-zinc-800 hover:border-zinc-900 hover:bg-zinc-900 hover:text-white"
-        @click="emit('export', template)"
-      >
+        @click="emit('export', template)">
         导出 PNG
       </button>
     </footer>
   </article>
 </template>
+
+<style scoped>
+.checkerboard-bg {
+  background:
+    linear-gradient(45deg, #f5f5f5 25%, transparent 25%) 0 0 / 18px 18px,
+    linear-gradient(45deg, transparent 75%, #f5f5f5 75%) 0 0 / 18px 18px,
+    linear-gradient(45deg, transparent 75%, #f5f5f5 75%) 9px -9px / 18px 18px,
+    linear-gradient(45deg, #f5f5f5 25%, #fff 25%) 9px -9px / 18px 18px;
+}
+</style>

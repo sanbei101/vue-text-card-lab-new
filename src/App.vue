@@ -110,12 +110,9 @@ const examples = [
 <template>
   <main class="mx-auto min-h-screen max-w-5xl min-w-[320px] pb-20 font-sans text-zinc-900">
     <header
-      class="flex items-end justify-between gap-8 rounded-[28px] border border-zinc-300 bg-[radial-gradient(circle_at_88%_20%,rgb(255_225_80/45%),transparent_24%),linear-gradient(135deg,#fff,#f7f7f8)] px-9.5 py-9 shadow-[0_16px_50px_rgb(0_0_0/6%)] max-[720px]:items-start max-[720px]:p-6.25"
-    >
+      class="header-bg flex items-end justify-between gap-8 rounded-[28px] border border-zinc-300 px-9.5 py-9 shadow-[0_16px_50px_rgb(0_0_0/6%)] max-[720px]:items-start max-[720px]:p-6.25">
       <div>
-        <span class="text-xs font-extrabold tracking-[0.18em] text-zinc-500"
-          >Vue / SVG / Auto Layout</span
-        >
+        <span class="text-xs font-extrabold tracking-[0.18em] text-zinc-500">Vue / SVG / Auto Layout</span>
         <h1 class="my-2.5 text-[clamp(36px,5vw,68px)] leading-none font-bold tracking-normal">
           文字卡片生成器
         </h1>
@@ -126,41 +123,31 @@ const examples = [
       </div>
 
       <div
-        class="grid size-30.5 shrink-0 rotate-6 place-items-center rounded-full bg-[#ffe04a] text-5xl leading-[0.8] font-black text-zinc-950 max-[720px]:size-21.5 max-[720px]:text-[34px]"
-      >
+        class="grid size-30.5 shrink-0 rotate-6 place-items-center rounded-full bg-[#ffe04a] text-5xl leading-[0.8] font-black text-zinc-950 max-[720px]:size-21.5 max-[720px]:text-[34px]">
         12
         <small class="text-sm tracking-[0.12em]">种模板</small>
       </div>
     </header>
 
     <section
-      class="mt-6 grid grid-cols-[1.5fr_1fr_1fr] gap-4.5 rounded-3xl border border-zinc-300 bg-white p-5.5 max-[1080px]:grid-cols-2 max-[720px]:grid-cols-1"
-    >
+      class="mt-6 grid grid-cols-[1.5fr_1fr_1fr] gap-4.5 rounded-3xl border border-zinc-300 bg-white p-5.5 max-[1080px]:grid-cols-2 max-[720px]:grid-cols-1">
       <label class="flex min-w-0 flex-col gap-2.5 max-[1080px]:col-span-full max-[720px]:col-auto">
         <span class="text-[13px] font-extrabold">标题内容</span>
-        <textarea
-          v-model="title"
+        <textarea v-model="title"
           class="min-h-31.5 w-full resize-y rounded-[14px] border border-zinc-300 bg-zinc-50 px-4 py-3.5 text-lg leading-[1.65] text-zinc-900 transition-[border-color,box-shadow] duration-150 outline-none focus:border-zinc-900 focus:shadow-[0_0_0_3px_rgb(24_24_27/8%)]"
-          maxlength="140"
-          rows="4"
-          placeholder="输入一段你想说的话"
-        />
+          maxlength="140" rows="4" placeholder="输入一段你想说的话" />
         <small class="text-zinc-400">{{ title.length }} / 140</small>
       </label>
 
       <div class="flex min-w-0 flex-col gap-2.5">
         <span class="text-[13px] font-extrabold">高亮关键词</span>
         <div class="flex gap-2.5">
-          <input
-            v-model="customKeyword"
+          <input v-model="customKeyword"
             class="w-full rounded-[14px] border border-zinc-300 bg-zinc-50 px-3.5 py-3 text-zinc-900 transition-[border-color,box-shadow] duration-150 outline-none focus:border-zinc-900 focus:shadow-[0_0_0_3px_rgb(24_24_27/8%)]"
-            :disabled="autoKeyword"
-            placeholder="例如：实习"
-          />
+            :disabled="autoKeyword" placeholder="例如：实习" />
 
           <label
-            class="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-zinc-300 bg-zinc-50 px-2.5 text-[13px] whitespace-nowrap"
-          >
+            class="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-zinc-300 bg-zinc-50 px-2.5 text-[13px] whitespace-nowrap">
             <input v-model="autoKeyword" type="checkbox" />
             <span>自动识别</span>
           </label>
@@ -175,13 +162,9 @@ const examples = [
       <div class="flex min-w-0 flex-col gap-2.5">
         <span class="text-[13px] font-extrabold">快速示例</span>
         <div class="flex flex-wrap gap-2">
-          <button
-            v-for="example in examples"
-            :key="example"
+          <button v-for="example in examples" :key="example"
             class="max-w-full cursor-pointer overflow-hidden rounded-full border border-zinc-300 bg-zinc-50 px-2.75 py-2.25 text-ellipsis whitespace-nowrap text-zinc-600 hover:border-zinc-400 hover:bg-white hover:text-zinc-950"
-            type="button"
-            @click="fillExample(example)"
-          >
+            type="button" @click="fillExample(example)">
             {{ example }}
           </button>
         </div>
@@ -189,8 +172,7 @@ const examples = [
     </section>
 
     <section
-      class="mt-14 mb-5.5 flex items-end justify-between gap-10 max-[720px]:mt-10.5 max-[720px]:flex-col max-[720px]:items-start max-[720px]:gap-1.25"
-    >
+      class="mt-14 mb-5.5 flex items-end justify-between gap-10 max-[720px]:mt-10.5 max-[720px]:flex-col max-[720px]:items-start max-[720px]:gap-1.25">
       <div>
         <span class="text-xs font-extrabold tracking-[0.18em] text-zinc-500">GENERATED CARDS</span>
         <h2 class="my-2.5 text-[clamp(28px,4vw,46px)] font-bold tracking-normal">
@@ -204,29 +186,27 @@ const examples = [
     </section>
 
     <section class="grid grid-cols-3 gap-5.5 max-[1080px]:grid-cols-2 max-[720px]:grid-cols-1">
-      <CardTile
-        v-for="template in templates"
-        :key="template.id"
-        :template="template"
-        :title="title"
-        :keyword="keyword"
-        @export="exportTemplate"
-      />
+      <CardTile v-for="template in templates" :key="template.id" :template="template" :title="title" :keyword="keyword"
+        @export="exportTemplate" />
     </section>
 
-    <div
-      id="export-stage"
-      class="pointer-events-none fixed top-[-10000px] left-[-10000px] -z-10 w-225"
-      aria-hidden="true"
-    >
+    <div id="export-stage" class="pointer-events-none fixed top-[-10000px] left-[-10000px] -z-10 w-225"
+      aria-hidden="true">
       <CardSvg :template="selectedTemplate" :title="title" :keyword="keyword" />
     </div>
 
-    <div
-      v-if="exporting"
-      class="fixed right-6 bottom-6 z-100 rounded-[13px] bg-zinc-900 px-4.25 py-3.25 font-bold text-white shadow-[0_12px_30px_rgb(0_0_0/22%)]"
-    >
+    <div v-if="exporting"
+      class="fixed right-6 bottom-6 z-100 rounded-[13px] bg-zinc-900 px-4.25 py-3.25 font-bold text-white shadow-[0_12px_30px_rgb(0_0_0/22%)]">
       正在生成高清 PNG…
     </div>
   </main>
 </template>
+
+
+<style scoped>
+.header-bg {
+  background:
+    radial-gradient(circle at 88% 20%, rgba(255, 225, 80, 0.45), transparent 24%),
+    linear-gradient(135deg, #fff, #f7f7f8);
+}
+</style>
