@@ -13,7 +13,10 @@
     "esModuleInterop": true,
     "lib": ["ESNEXT", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "vite.config.ts"]
 }

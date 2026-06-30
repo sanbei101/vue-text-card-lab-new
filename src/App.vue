@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from "vue";
 
-import { inferKeyword } from "./card-engine";
-import CardSvg from "./card/CardSvg.vue";
-import CardTile from "./components/CardTile.vue";
-import { templates } from "./templates";
-import type { CardTemplate } from "./types";
+import { inferKeyword } from "@/card-engine";
+import CardSvg from "@/card/CardSvg.vue";
+import CardTile from "@/components/CardTile.vue";
+import { templates } from "@/templates";
+import type { CardTemplate } from "@/types";
 
 const title = ref("7月10号才能到岗，还能找到实习吗");
 

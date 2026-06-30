@@ -1,4 +1,4 @@
-import type { CardTemplate } from "./types";
+import type { CardTemplate } from "@/types";
 
 const baseBox = {
   x: 96,

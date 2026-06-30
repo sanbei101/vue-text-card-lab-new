@@ -1,6 +1,7 @@
 import type { Component } from "vue";
 
-import type { TemplateKind } from "../../types";
+import type { TemplateKind } from "@/types";
+
 import BubbleCard from "./BubbleCard.vue";
 import BurstCard from "./BurstCard.vue";
 import EditorialCard from "./EditorialCard.vue";

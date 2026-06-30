@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CardTemplate, HighlightRect } from "../../types";
+import type { CardTemplate, HighlightRect } from "@/types";
 
 defineProps<{
   template: CardTemplate;

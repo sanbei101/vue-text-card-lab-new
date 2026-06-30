@@ -1,7 +1,7 @@
 import { computed } from "vue";
 
-import { buildTextLayout, findHighlightRects, hashText, seededValue } from "../../card-engine";
-import type { CardTemplate } from "../../types";
+import { buildTextLayout, findHighlightRects, hashText, seededValue } from "@/card-engine";
+import type { CardTemplate } from "@/types";
 
 export interface CardRenderProps {
   template: CardTemplate;

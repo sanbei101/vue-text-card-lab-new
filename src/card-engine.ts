@@ -8,7 +8,7 @@ import {
 } from "@chenglou/pretext";
 import type { PreparedTextWithSegments } from "@chenglou/pretext";
 
-import type { CardTemplate, HighlightRect, TextLayout } from "./types";
+import type { CardTemplate, HighlightRect, TextLayout } from "@/types";
 
 const DEFAULT_EMPTY_TEXT = "输入一个标题";
 const PREPARED_CACHE_LIMIT = 320;
