@@ -2,7 +2,7 @@
 import { computed, nextTick, ref, watch } from "vue";
 
 import { inferKeyword } from "./card-engine";
-import CardSvg from "./components/CardSvg.vue";
+import CardSvg from "./card/CardSvg.vue";
 import CardTile from "./components/CardTile.vue";
 import { templates } from "./templates";
 import type { CardTemplate } from "./types";
