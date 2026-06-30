@@ -36,25 +36,25 @@ const { layout, highlights, textX, textAnchor } = useCardRender(props);
     <!-- 便签装饰 -->
     <g>
       <path
-        d="M92 170 H808 V970 L740 1038 H92 Z"
+        d="M40 40 H860 V1100 L802 1100 H40 Z"
         fill="#fff9cf"
         :stroke="template.muted"
         stroke-width="3"
         filter="url(#shadow-yellow-memo)"
       />
-      <path d="M740 970 H808 L740 1038 Z" fill="#f0d66d" />
+      <path d="M802 1100 H860 L802 1124 Z" fill="#f0d66d" />
       <rect
-        x="180"
-        y="110"
+        x="120"
+        y="90"
         width="210"
         height="78"
         rx="10"
         fill="#ffd4ba"
         opacity="0.85"
-        transform="rotate(-5 180 110)"
+        transform="rotate(-5 225 90)"
       />
       <path
-        d="M135 930 C230 865 315 995 420 918 S635 895 760 945"
+        d="M145 920 C240 855 325 985 430 908 S640 885 760 935"
         fill="none"
         :stroke="template.accent"
         stroke-width="12"
