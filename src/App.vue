@@ -138,8 +138,7 @@ const examples = [
 </script>
 
 <template>
-  <main
-    class="mx-auto min-h-screen min-w-[320px] w-[min(1480px,calc(100%-32px))]12 pb-20 font-sans text-zinc-900 max-[720px]:w-[min(calc(100%-20px),1480px)] max-[720px]:pt-3.5">
+  <main class="mx-auto min-h-screen min-w-[320px] pb-20 font-sans text-zinc-900 max-w-5xl">
     <header
       class="flex items-end justify-between gap-8 rounded-[28px] border border-zinc-300 bg-[radial-gradient(circle_at_88%_20%,rgb(255_225_80/45%),transparent_24%),linear-gradient(135deg,#fff,#f7f7f8)] px-9.5 py-9 shadow-[0_16px_50px_rgb(0_0_0/6%)] max-[720px]:items-start max-[720px]:p-6.25">
       <div>
