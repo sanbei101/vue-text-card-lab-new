@@ -1,5 +1,15 @@
 import type { CardTemplate, HighlightRect, TextLayout } from "./types";
 
+const segmenter = new Intl.Segmenter(undefined, { granularity: "grapheme" });
+
+function graphemeLength(value: string): number {
+  let count = 0;
+  for (const _segment of segmenter.segment(value)) {
+    count++;
+  }
+  return count;
+}
+
 const BREAK_AFTER = new Set([
   "，",
   "。",
@@ -46,7 +56,7 @@ function setFont(fontSize: number, fontWeight: number, fontFamily: string) {
 export function measureText(value: string, fontSize: number, template: CardTemplate) {
   setFont(fontSize, template.fontWeight, template.fontFamily);
 
-  return context?.measureText(value).width ?? [...value].length * fontSize;
+  return context?.measureText(value).width ?? graphemeLength(value) * fontSize;
 }
 
 function candidateBreaks(text: string) {
@@ -89,7 +99,7 @@ function linePenalty(line: string, lineWidth: number, maxWidth: number, isLast: 
 
   if (BREAK_AFTER.has(last)) penalty -= 100;
 
-  if ([...line].length <= 2) penalty += isLast ? 680 : 1100;
+  if (graphemeLength(line) <= 2) penalty += isLast ? 680 : 1100;
 
   return penalty;
 }
