@@ -77,7 +77,7 @@ const particles = computed(() =>
 
 <template>
   <svg
-    class="card-svg"
+    class="block h-auto w-full overflow-visible"
     viewBox="0 0 900 1200"
     xmlns="http://www.w3.org/2000/svg"
     role="img"
