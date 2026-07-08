@@ -36,12 +36,12 @@
     <rect x="52" y="52" width="796" height="1096" rx="28" fill="#f7fbef" opacity="0.74"/>
     <g stroke="{{.Template.Muted}}" stroke-width="2" opacity="0.45">
       {{ range $y := seq 14 }}
-      <line x1="80" x2="820" y1="{{f (add 150 (mul $y 62))}}" y2="{{f (add 150 (mul $y 62))}}"/>
+      <line x1="80" x2="820" y1="{{f (add 150 (mul (float $y) 62))}}" y2="{{f (add 150 (mul (float $y) 62))}}"/>
       {{ end }}
     </g>
     <line x1="145" y1="90" x2="145" y2="1110" stroke="{{.Template.Accent}}" stroke-width="4" opacity="0.6"/>
     {{ range $y := seq 8 }}
-    <circle cx="74" cy="{{f (add 150 (mul $y 120))}}" r="11" fill="#d7e4cb"/>
+    <circle cx="74" cy="{{f (add 150 (mul (float $y) 120))}}" r="11" fill="#d7e4cb"/>
     {{ end }}
   </g>
 
