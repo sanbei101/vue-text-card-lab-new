@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"sync"
 
+	"github.com/phuslu/lru"
 	"github.com/rivo/uniseg"
 	"golang.org/x/image/font"
 )
@@ -70,19 +70,22 @@ type LayoutCandidate struct {
 	Score     float64
 }
 
-// --- 2. 文本测量器 (抽象隔离层) ---
+// 文本测量器
 
-// Measurer 接口允许你注入具体的字体测量逻辑
 type Measurer interface {
 	MeasureText(text string, fontSize float64, letterSpacing float64) float64
 }
 
-// FontMeasurer 是基于 x/image/font 的具体实现，带有 LRU/并发缓存
 type FontMeasurer struct {
-	// 实际应用中，这里应该持有一个根据 fontSize 获取 font.Face 的工厂或缓存
-	// 这里为了引擎完整性，抽象为一个获取 Face 的函数
 	FaceProvider func(fontSize float64) font.Face
-	cache        sync.Map // 简单的并发缓存: map[string]float64
+	cache        *lru.LRUCache[string, float64]
+}
+
+func NewFontMeasurer(faceProvider func(fontSize float64) font.Face, cacheSize int) *FontMeasurer {
+	return &FontMeasurer{
+		FaceProvider: faceProvider,
+		cache:        lru.NewLRUCache[string, float64](cacheSize),
+	}
 }
 
 func (m *FontMeasurer) MeasureText(text string, fontSize float64, letterSpacing float64) float64 {
@@ -90,22 +93,20 @@ func (m *FontMeasurer) MeasureText(text string, fontSize float64, letterSpacing 
 		return 0
 	}
 	cacheKey := text + "|" + floatToStr(fontSize) + "|" + floatToStr(letterSpacing)
-	if val, ok := m.cache.Load(cacheKey); ok {
-		return val.(float64)
+	if width, ok := m.cache.Get(cacheKey); ok {
+		return width
 	}
 
 	face := m.FaceProvider(fontSize)
 	advance := font.MeasureString(face, text)
-	// font.MeasureString 返回 26.6 定点数，右移 6 位转为 float64 像素
 	width := float64(advance) / 64.0
 
-	// 加上 LetterSpacing
 	graphemeCount := GraphemeLength(text)
 	if graphemeCount > 1 {
 		width += float64(graphemeCount-1) * letterSpacing
 	}
 
-	m.cache.Store(cacheKey, width)
+	m.cache.Set(cacheKey, width)
 	return width
 }
 
@@ -254,7 +255,7 @@ func getIdealLineCount(text string, maxLines int) int {
 	return maxLines
 }
 
-func scoreLinePunctuation(line string, isLast boolean) float64 {
+func scoreLinePunctuation(line string, isLast bool) float64 {
 	first := FirstGrapheme(line)
 	last := LastGrapheme(line)
 	score := 0.0
@@ -272,8 +273,6 @@ func scoreLinePunctuation(line string, isLast boolean) float64 {
 	}
 	return score
 }
-
-type boolean bool
 
 func scoreLayout(lines []LayoutLineValue, wrapWidth, boxWidth float64, maxLines int, text string) float64 {
 	if len(lines) == 0 {
@@ -308,7 +307,7 @@ func scoreLayout(lines []LayoutLineValue, wrapWidth, boxWidth float64, maxLines 
 		length := GraphemeLength(line.Text)
 		fill := fillRatios[i]
 
-		score += scoreLinePunctuation(line.Text, boolean(isLast))
+		score += scoreLinePunctuation(line.Text, isLast)
 
 		if !isLast && fill < 0.54 {
 			score += math.Pow(0.54-fill, 2) * 1700
@@ -444,7 +443,7 @@ func createFallbackCandidate(rawText string, fontSize float64, template CardTemp
 	}
 }
 
-// BuildTextLayout 核心入口：构建标题卡片的最终文字布局
+// BuildTextLayout 核心入口:构建标题卡片的最终文字布局
 func BuildTextLayout(rawText string, template CardTemplate, m Measurer) TextLayout {
 	text := NormalizeText(rawText)
 	if text == "" {
