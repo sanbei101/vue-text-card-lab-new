@@ -1,0 +1,73 @@
+{{ define "lavender" }}<svg class="block h-auto w-full overflow-visible" viewBox="0 0 900 1200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{{svgEscape .Template.Name}}">
+  <defs>
+    <linearGradient id="gradient-{{.Template.ID}}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="{{.Template.Background}}"/>
+      <stop offset="1" stop-color="{{.Template.Muted}}" stop-opacity="0.36"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景（渐变） -->
+  <rect x="18" y="18" width="864" height="1164" rx="{{f .Template.Radius}}" fill="url(#gradient-{{.Template.ID}})" stroke="{{.Template.Muted}}" stroke-width="2"/>
+
+  <!-- 柔雾紫装饰 -->
+  <g>
+    <circle cx="160" cy="180" r="128" fill="#ffffff" opacity="0.42"/>
+    <circle cx="760" cy="250" r="170" fill="{{.Template.Accent}}" opacity="0.09"/>
+    <path d="M145 950 C285 850 410 1040 575 920 S775 850 830 960" fill="none" stroke="{{.Template.Accent}}" stroke-width="7" stroke-linecap="round" opacity="0.4"/>
+    {{ range $i, $p := slice .Particles 0 7 }}
+    <g transform="translate({{f $p.X}} {{f $p.Y}}) rotate({{f $p.Rotation}})">
+      <path d="M0 -14 L4 -4 L14 0 L4 4 L0 14 L-4 4 L-14 0 L-4 -4 Z" fill="{{$.Template.Accent}}" opacity="0.3"/>
+    </g>
+    {{ end }}
+  </g>
+
+  {{ template "highlight_layer" . }}
+  {{ template "main_text" . }}
+  {{ template "card_signature" . }}
+</svg>
+{{ end }}
+
+{{ define "notebook" }}<svg class="block h-auto w-full overflow-visible" viewBox="0 0 900 1200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{{svgEscape .Template.Name}}">
+  <!-- 背景 -->
+  <rect x="18" y="18" width="864" height="1164" rx="{{f .Template.Radius}}" fill="{{.Template.Background}}"/>
+
+  <!-- 绿格手账装饰 -->
+  <g>
+    <rect x="52" y="52" width="796" height="1096" rx="28" fill="#f7fbef" opacity="0.74"/>
+    <g stroke="{{.Template.Muted}}" stroke-width="2" opacity="0.45">
+      {{ range $y := seq 14 }}
+      <line x1="80" x2="820" y1="{{f (add 150 (mul $y 62))}}" y2="{{f (add 150 (mul $y 62))}}"/>
+      {{ end }}
+    </g>
+    <line x1="145" y1="90" x2="145" y2="1110" stroke="{{.Template.Accent}}" stroke-width="4" opacity="0.6"/>
+    {{ range $y := seq 8 }}
+    <circle cx="74" cy="{{f (add 150 (mul $y 120))}}" r="11" fill="#d7e4cb"/>
+    {{ end }}
+  </g>
+
+  {{ template "highlight_layer" . }}
+  {{ template "main_text" . }}
+  {{ template "card_signature" . }}
+</svg>
+{{ end }}
+
+{{ define "stamp" }}<svg class="block h-auto w-full overflow-visible" viewBox="0 0 900 1200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{{svgEscape .Template.Name}}">
+  <!-- 背景 -->
+  <rect x="18" y="18" width="864" height="1164" rx="{{f .Template.Radius}}" fill="{{.Template.Background}}"/>
+
+  <!-- 红印宣言装饰 -->
+  <g>
+    <rect x="55" y="55" width="790" height="1090" rx="8" fill="none" stroke="{{.Template.Accent}}" stroke-width="6"/>
+    <rect x="80" y="80" width="740" height="1040" rx="4" fill="none" stroke="{{.Template.Accent}}" stroke-width="2" stroke-dasharray="18 12" opacity="0.65"/>
+    <g transform="translate(690 945) rotate(-12)" opacity="0.8">
+      <rect width="125" height="125" fill="none" stroke="{{.Template.Accent}}" stroke-width="10"/>
+      <text x="62" y="56" text-anchor="middle" fill="{{.Template.Accent}}" font-size="30" font-family="serif" font-weight="900">今日</text>
+      <text x="62" y="96" text-anchor="middle" fill="{{.Template.Accent}}" font-size="30" font-family="serif" font-weight="900">要说</text>
+    </g>
+  </g>
+
+  {{ template "highlight_layer" . }}
+  {{ template "main_text" . }}
+  {{ template "card_signature" . }}
+</svg>
+{{ end }}

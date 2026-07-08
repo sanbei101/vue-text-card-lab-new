@@ -7,3 +7,5 @@ require (
 	github.com/rivo/uniseg v0.4.7
 	golang.org/x/image v0.43.0
 )
+
+require golang.org/x/text v0.38.0 // indirect

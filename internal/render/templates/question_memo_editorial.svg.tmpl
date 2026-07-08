@@ -1,0 +1,71 @@
+{{ define "question" }}<svg class="block h-auto w-full overflow-visible" viewBox="0 0 900 1200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{{svgEscape .Template.Name}}">
+  <defs>
+    <filter id="shadow-{{.Template.ID}}" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- 背景 -->
+  <rect x="18" y="18" width="864" height="1164" rx="{{f .Template.Radius}}" fill="{{.Template.Background}}" stroke="{{.Template.Muted}}" stroke-width="2"/>
+
+  <!-- 清透问号装饰 -->
+  <g fill="{{.Template.Muted}}" opacity="0.18" font-family="Arial Black, sans-serif" font-weight="900">
+    <text x="-80" y="260" font-size="310" transform="rotate(-18 -80 260)">?</text>
+    <text x="300" y="390" font-size="430" transform="rotate(32 300 390)">?</text>
+    <text x="560" y="1040" font-size="330" transform="rotate(-20 560 1040)">?</text>
+    <circle cx="735" cy="490" r="72"/>
+  </g>
+
+  {{ template "highlight_layer" . }}
+  {{ template "main_text" . }}
+  {{ template "card_signature" . }}
+</svg>
+{{ end }}
+
+{{ define "memo" }}<svg class="block h-auto w-full overflow-visible" viewBox="0 0 900 1200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{{svgEscape .Template.Name}}">
+  <defs>
+    <filter id="shadow-yellow-memo" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- 背景 -->
+  <rect x="18" y="18" width="864" height="1164" rx="{{f .Template.Radius}}" fill="{{.Template.Background}}"/>
+
+  <!-- 便签装饰 -->
+  <g>
+    <path d="M40 40 H860 V1100 L802 1100 H40 Z" fill="#fff9cf" stroke="{{.Template.Muted}}" stroke-width="3" filter="url(#shadow-yellow-memo)"/>
+    <path d="M802 1100 H860 L802 1124 Z" fill="#f0d66d"/>
+    <rect x="120" y="90" width="210" height="78" rx="10" fill="#ffd4ba" opacity="0.85" transform="rotate(-5 225 90)"/>
+    <path d="M145 920 C240 855 325 985 430 908 S640 885 760 935" fill="none" stroke="{{.Template.Accent}}" stroke-width="12" stroke-linecap="round" opacity="0.65"/>
+  </g>
+
+  {{ template "highlight_layer" . }}
+  {{ template "main_text" . }}
+</svg>
+{{ end }}
+
+{{ define "editorial" }}<svg class="block h-auto w-full overflow-visible" viewBox="0 0 900 1200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{{svgEscape .Template.Name}}">
+  <defs>
+    <filter id="shadow-{{.Template.ID}}" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- 背景 -->
+  <rect x="18" y="18" width="864" height="1164" rx="{{f .Template.Radius}}" fill="{{.Template.Background}}"/>
+
+  <!-- 杂志装饰 -->
+  <g>
+    <rect x="62" y="78" width="776" height="54" fill="{{.Template.Foreground}}"/>
+    <text x="78" y="118" fill="#fff" font-size="27" font-family="Arial, sans-serif" font-weight="700" letter-spacing="7">DAILY NOTE / 2026</text>
+    <rect x="62" y="1020" width="250" height="18" fill="{{.Template.Accent}}"/>
+    <text x="62" y="1102" fill="{{.Template.Foreground}}" font-size="28" font-family="Arial, sans-serif" letter-spacing="3">WORDS MATTER.</text>
+    <circle cx="760" cy="1045" r="78" fill="none" stroke="{{.Template.Foreground}}" stroke-width="4"/>
+    <text x="760" y="1060" text-anchor="middle" fill="{{.Template.Foreground}}" font-size="44" font-family="Arial Black, sans-serif">12</text>
+  </g>
+
+  {{ template "highlight_layer" . }}
+  {{ template "main_text" . }}
+</svg>
+{{ end }}
