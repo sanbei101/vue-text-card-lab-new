@@ -1,7 +1,9 @@
 {{- define "main_text" -}}
-<g fill="{{.Template.Foreground}}" font-family="{{.Template.FontFamily}}" font-weight="{{.Template.FontWeight}}" text-anchor="{{.TextAnchor}}">
-{{- range $i, $line := .Layout.Lines }}
-<text x="{{f $.TextX}}" y="{{f (add $.Template.TextBox.Y (add $.Layout.FontSize (mul (float $i) $.Layout.LineHeightPx))) }}" font-size="{{f $.Layout.FontSize}}" dominant-baseline="alphabetic">{{svgEscape $line}}</text>
+<g fill="{{.Template.Foreground}}">
+{{- range $line := .Lines }}
+  <g transform="translate({{f $line.X}} {{f $line.Y}})">
+    <path d="{{$line.Path}}" fill="{{$.Template.Foreground}}"/>
+  </g>
 {{- end }}
 </g>
 {{- end -}}
@@ -18,7 +20,9 @@
 {{- define "card_signature" -}}
 <g fill="{{.Template.Foreground}}" opacity="0.62">
   <circle cx="112" cy="1078" r="18"/>
-  <text x="145" y="1087" font-size="24" font-family="{{.Template.FontFamily}}" font-weight="600">此刻想说</text>
+  <g transform="translate(145 1087)">
+    <path d="{{.SignaturePath}}" fill="{{.Template.Foreground}}"/>
+  </g>
 </g>
 {{- end -}}
 

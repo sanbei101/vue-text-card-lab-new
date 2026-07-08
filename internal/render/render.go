@@ -11,6 +11,7 @@ import (
 	"text/template"
 
 	"github.com/sanbei101/blue-card-engine/internal/cardengine"
+	"github.com/sanbei101/blue-card-engine/internal/fonts"
 	"github.com/sanbei101/blue-card-engine/internal/templates"
 )
 
@@ -54,12 +55,20 @@ type RenderData struct {
 	Template         templates.CardTemplate
 	Title            string
 	Keyword          string
-	Layout           cardengine.TextLayout
+	Lines            []TextLine
 	Highlights       []cardengine.HighlightRect
-	TextAnchor       string
-	TextX            float64
 	Particles        []Particle
 	HighlightOpacity float64
+	SignaturePath    string
+}
+
+// TextLine 保存一行文字的 path 与绘制位置。
+type TextLine struct {
+	Text  string
+	Path  string
+	Width float64
+	X     float64
+	Y     float64
 }
 
 // Particle 对应 useCardRender 中的装饰粒子。
@@ -71,8 +80,11 @@ type Particle struct {
 }
 
 // RenderCard 根据模板、标题和关键词生成 SVG 字符串。
-func RenderCard(tpl templates.CardTemplate, title, keyword string, measurer cardengine.Measurer) (string, error) {
+func RenderCard(tpl templates.CardTemplate, title, keyword string, lib *fonts.Library) (string, error) {
 	title = strings.TrimSpace(title)
+	if title == "" {
+		title = cardengine.DefaultEmptyText
+	}
 
 	engineTpl := cardengine.CardTemplate{
 		TextBox: cardengine.TextBox{
@@ -89,19 +101,30 @@ func RenderCard(tpl templates.CardTemplate, title, keyword string, measurer card
 		},
 	}
 
+	family := lib.Resolve(tpl.FontFamily)
+	measurer := cardengine.NewFontMeasurer(lib.FaceProvider(family), 4096)
 	layout := cardengine.BuildTextLayout(title, engineTpl, measurer)
 	highlights := cardengine.FindHighlightRects(layout, keyword, engineTpl, measurer)
+
+	lines, err := buildTextLines(lib, tpl, layout)
+	if err != nil {
+		return "", fmt.Errorf("build text lines: %w", err)
+	}
+
+	signaturePath, _, err := TextToPath(lib.SFNT(tpl.FontFamily), "此刻想说", 24)
+	if err != nil {
+		return "", fmt.Errorf("build signature path: %w", err)
+	}
 
 	data := RenderData{
 		Template:         tpl,
 		Title:            title,
 		Keyword:          keyword,
-		Layout:           layout,
+		Lines:            lines,
 		Highlights:       highlights,
-		TextAnchor:       textAnchor(tpl.TextBox.Align),
-		TextX:            textX(tpl.TextBox),
 		Particles:        makeParticles(title, tpl.ID),
 		HighlightOpacity: defaultHighlightOpacity(tpl.Kind),
+		SignaturePath:    signaturePath,
 	}
 
 	var buf bytes.Buffer
@@ -111,33 +134,47 @@ func RenderCard(tpl templates.CardTemplate, title, keyword string, measurer card
 	return buf.String(), nil
 }
 
+func buildTextLines(lib *fonts.Library, tpl templates.CardTemplate, layout cardengine.TextLayout) ([]TextLine, error) {
+	font := lib.SFNT(tpl.FontFamily)
+	if font == nil {
+		return nil, fmt.Errorf("sfnt font not found for %s", tpl.FontFamily)
+	}
+
+	lines := make([]TextLine, 0, len(layout.Lines))
+	for i, text := range layout.Lines {
+		path, width, err := TextToPath(font, text, layout.FontSize)
+		if err != nil {
+			return nil, fmt.Errorf("text to path for line %q: %w", text, err)
+		}
+
+		y := tpl.TextBox.Y + layout.FontSize + float64(i)*layout.LineHeightPx
+		lines = append(lines, TextLine{
+			Text:  text,
+			Path:  path,
+			Width: width,
+			X:     lineStartX(tpl.TextBox, width),
+			Y:     y,
+		})
+	}
+	return lines, nil
+}
+
+func lineStartX(box templates.TextBoxSpec, lineWidth float64) float64 {
+	switch box.Align {
+	case "center":
+		return box.X + (box.Width-lineWidth)/2
+	case "right":
+		return box.X + box.Width - lineWidth
+	default:
+		return box.X
+	}
+}
+
 func defaultHighlightOpacity(kind string) float64 {
 	if kind == "night" {
 		return 0.9
 	}
 	return 0
-}
-
-func textAnchor(align string) string {
-	switch align {
-	case "center":
-		return "middle"
-	case "right":
-		return "end"
-	default:
-		return "start"
-	}
-}
-
-func textX(box templates.TextBoxSpec) float64 {
-	switch box.Align {
-	case "center":
-		return box.X + box.Width/2
-	case "right":
-		return box.X + box.Width
-	default:
-		return box.X
-	}
 }
 
 func makeParticles(title, id string) []Particle {

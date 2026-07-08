@@ -5,7 +5,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/sanbei101/blue-card-engine/internal/cardengine"
 	"github.com/sanbei101/blue-card-engine/internal/fonts"
 	"github.com/sanbei101/blue-card-engine/internal/templates"
 )
@@ -26,8 +25,7 @@ func TestRenderCard_SaveSample(t *testing.T) {
 		t.Fatal("template mono not found")
 	}
 
-	measurer := NewMeasurer(lib, tpl.FontFamily)
-	svg, err := RenderCard(tpl, "你好,世界", "世界", measurer)
+	svg, err := RenderCard(tpl, "你好,世界", "世界", lib)
 	if err != nil {
 		t.Fatalf("render card: %v", err)
 	}
@@ -42,9 +40,4 @@ func TestRenderCard_SaveSample(t *testing.T) {
 	}
 
 	t.Logf("saved sample SVG to %s", outPath)
-}
-
-func NewMeasurer(lib *fonts.Library, fontFamily string) *cardengine.FontMeasurer {
-	family := lib.Resolve(fontFamily)
-	return cardengine.NewFontMeasurer(lib.FaceProvider(family), 4096)
 }

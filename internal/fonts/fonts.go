@@ -6,6 +6,7 @@ import (
 
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/opentype"
+	"golang.org/x/image/font/sfnt"
 )
 
 //go:embed fonts/*.ttf
@@ -23,23 +24,38 @@ var familyNameMap = map[string]string{
 // Library 保存已解析的字体。
 type Library struct {
 	fonts    map[string]*opentype.Font
+	sfnts    map[string]*sfnt.Font
+	raw      map[string][]byte
 	fallback string
 }
 
 // NewLibrary 加载并解析所有嵌入字体。
 func NewLibrary() (*Library, error) {
-	lib := &Library{fonts: make(map[string]*opentype.Font)}
+	lib := &Library{
+		fonts: make(map[string]*opentype.Font),
+		sfnts: make(map[string]*sfnt.Font),
+		raw:   make(map[string][]byte),
+	}
 
 	for family, filename := range familyNameMap {
 		data, err := fontFS.ReadFile("fonts/" + filename)
 		if err != nil {
 			return nil, fmt.Errorf("read font %s: %w", filename, err)
 		}
+
 		f, err := opentype.Parse(data)
 		if err != nil {
-			return nil, fmt.Errorf("parse font %s: %w", filename, err)
+			return nil, fmt.Errorf("parse opentype font %s: %w", filename, err)
 		}
+
+		sfntFont, err := sfnt.Parse(data)
+		if err != nil {
+			return nil, fmt.Errorf("parse sfnt font %s: %w", filename, err)
+		}
+
 		lib.fonts[family] = f
+		lib.sfnts[family] = sfntFont
+		lib.raw[family] = data
 		if lib.fallback == "" {
 			lib.fallback = family
 		}
@@ -98,4 +114,10 @@ func (lib *Library) FaceProvider(fontFamily string) func(fontSize float64) font.
 		}
 		return face
 	}
+}
+
+// SFNT 返回解析后的 sfnt.Font，用于字形轮廓提取。
+func (lib *Library) SFNT(fontFamily string) *sfnt.Font {
+	family := lib.Resolve(fontFamily)
+	return lib.sfnts[family]
 }

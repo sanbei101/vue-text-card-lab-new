@@ -14,10 +14,8 @@ import (
 
 // Handler 持有渲染所需依赖。
 type Handler struct {
-	templates  *templates.Registry
-	library    *fonts.Library
-	measurers  map[string]*cardengine.FontMeasurer
-	cacheSize  int
+	templates *templates.Registry
+	library   *fonts.Library
 }
 
 // NewHandler 创建路由处理器。
@@ -25,8 +23,6 @@ func NewHandler(reg *templates.Registry, lib *fonts.Library) *Handler {
 	return &Handler{
 		templates: reg,
 		library:   lib,
-		measurers: make(map[string]*cardengine.FontMeasurer),
-		cacheSize: 4096,
 	}
 }
 
@@ -66,8 +62,7 @@ func (h *Handler) cards(w http.ResponseWriter, r *http.Request) {
 
 	var results []map[string]any
 	for _, tpl := range h.templates.All() {
-		measurer := h.measurerFor(tpl.FontFamily)
-		svg, err := render.RenderCard(tpl, title, keyword, measurer)
+		svg, err := render.RenderCard(tpl, title, keyword, h.library)
 		if err != nil {
 			log.Printf("render card %s failed: %v", tpl.ID, err)
 			writeJSON(w, http.StatusInternalServerError, map[string]any{
@@ -84,16 +79,6 @@ func (h *Handler) cards(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, map[string]any{"templates": results})
-}
-
-func (h *Handler) measurerFor(fontFamily string) *cardengine.FontMeasurer {
-	family := h.library.Resolve(fontFamily)
-	if m, ok := h.measurers[family]; ok {
-		return m
-	}
-	m := cardengine.NewFontMeasurer(h.library.FaceProvider(family), h.cacheSize)
-	h.measurers[family] = m
-	return m
 }
 
 func writeJSON(w http.ResponseWriter, status int, data any) {
