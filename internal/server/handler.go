@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	cardengine "github.com/sanbei101/blue-card-engine"
+	"github.com/sanbei101/blue-card-engine/internal/cardengine"
 	"github.com/sanbei101/blue-card-engine/internal/fonts"
 	"github.com/sanbei101/blue-card-engine/internal/render"
 	"github.com/sanbei101/blue-card-engine/internal/templates"

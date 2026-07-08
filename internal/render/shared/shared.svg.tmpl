@@ -1,7 +1,7 @@
 {{- define "main_text" -}}
 <g fill="{{.Template.Foreground}}" font-family="{{.Template.FontFamily}}" font-weight="{{.Template.FontWeight}}" text-anchor="{{.TextAnchor}}">
 {{- range $i, $line := .Layout.Lines }}
-<text x="{{f $.TextX}}" y="{{f (add $.Template.TextBox.Y (add $.Layout.FontSize (mul $i $.Layout.LineHeightPx))) }}" font-size="{{f $.Layout.FontSize}}" dominant-baseline="alphabetic">{{svgEscape $line}}</text>
+<text x="{{f $.TextX}}" y="{{f (add $.Template.TextBox.Y (add $.Layout.FontSize (mul (float $i) $.Layout.LineHeightPx))) }}" font-size="{{f $.Layout.FontSize}}" dominant-baseline="alphabetic">{{svgEscape $line}}</text>
 {{- end }}
 </g>
 {{- end -}}

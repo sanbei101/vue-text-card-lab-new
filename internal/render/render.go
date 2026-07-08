@@ -10,7 +10,7 @@ import (
 	"strings"
 	"text/template"
 
-	cardengine "github.com/sanbei101/blue-card-engine"
+	"github.com/sanbei101/blue-card-engine/internal/cardengine"
 	"github.com/sanbei101/blue-card-engine/internal/templates"
 )
 

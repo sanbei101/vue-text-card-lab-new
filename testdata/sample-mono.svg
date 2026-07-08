@@ -1,0 +1,21 @@
+<svg class="block h-auto w-full overflow-visible" viewBox="0 0 900 1200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="极简边框">
+  <!-- 背景 -->
+  <rect x="18" y="18" width="864" height="1164" rx="12" fill="#ffffff" stroke="#181818" stroke-width="7"/>
+
+  <!-- 极简边框装饰 -->
+  <g>
+    <text x="90" y="120" fill="#181818" font-size="26" font-family="Arial, sans-serif" letter-spacing="6">TEXT CARD / 001</text>
+    <line x1="90" y1="150" x2="810" y2="150" stroke="#181818" stroke-width="3"/>
+    <line x1="90" y1="1035" x2="810" y2="1035" stroke="#181818" stroke-width="3"/>
+    <circle cx="110" cy="1090" r="12" fill="#181818"/>
+    <circle cx="150" cy="1090" r="12" fill="none" stroke="#181818" stroke-width="3"/>
+  </g>
+
+  
+<g transform="rotate(0 530 361.9)">
+  <rect x="450.8" y="342.6" width="158.4" height="38.7" rx="18" fill="#181818" opacity="0.8"/>
+</g>
+  <g fill="#181818" font-family=""ZCOOL KuaiLe", "PingFang SC", "Microsoft YaHei", sans-serif" font-weight="700" text-anchor="middle">
+<text x="450" y="377.4" font-size="77.4" dominant-baseline="alphabetic">你好,世界</text>
+</g>
+</svg>
