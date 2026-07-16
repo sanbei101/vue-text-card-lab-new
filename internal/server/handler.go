@@ -24,8 +24,6 @@ type Handler struct {
 	library   *fonts.Library
 }
 
-var _ cardenginev1connect.CardEngineServiceHandler = (*Handler)(nil)
-
 func NewHandler(reg *templates.Registry, lib *fonts.Library) *Handler {
 	return &Handler{
 		templates: reg,

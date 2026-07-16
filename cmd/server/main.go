@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"net/http"
 	"os"
 
@@ -11,7 +12,37 @@ import (
 	"github.com/sanbei101/blue-card-engine/internal/templates"
 )
 
+func initLog() {
+	env := os.Getenv("ENV")
+	if env == "production" {
+		log.DefaultLogger = log.Logger{
+			Level: log.InfoLevel,
+			Writer: &log.AsyncWriter{
+				ChannelSize:   4096,
+				DiscardOnFull: false,
+				Writer:        &log.IOWriter{Writer: os.Stderr},
+			},
+		}
+	} else {
+		log.DefaultLogger = log.Logger{
+			Level:      log.DebugLevel,
+			TimeFormat: "15:04:05",
+			Caller:     1,
+			Writer: &log.ConsoleWriter{
+				ColorOutput:    true,
+				QuoteString:    true,
+				EndWithMessage: true,
+			},
+		}
+	}
+}
+
 func main() {
+	initLog()
+	if closer, ok := log.DefaultLogger.Writer.(io.Closer); ok {
+		defer closer.Close()
+	}
+
 	lib, err := fonts.NewLibrary()
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to create font library")
@@ -31,9 +62,9 @@ func main() {
 		port = "5174"
 	}
 
-	addr := ":" + port
+	addr := "0.0.0.0:" + port
+	log.Info().Msgf("server is running at %s", addr)
 	if err := http.ListenAndServe(addr, mux); err != nil {
 		log.Fatal().Err(err).Msg("failed to start server")
 	}
-	log.Info().Msgf("server is running at http://localhost%s", addr)
 }
