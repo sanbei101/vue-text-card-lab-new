@@ -1,0 +1,25 @@
+{{ define "night" }}<svg class="block h-auto w-full overflow-visible" viewBox="0 0 900 1200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{{svgEscape .Template.Name}}">
+  <!-- 背景 -->
+  <rect x="18" y="18" width="864" height="1164" rx="{{f .Template.Radius}}" fill="{{.Template.Background}}"/>
+
+  <!-- 深夜星光装饰 -->
+  <g>
+    <circle cx="710" cy="220" r="116" fill="{{.Template.Accent}}" opacity="0.96"/>
+    <circle cx="755" cy="185" r="120" fill="{{.Template.Background}}"/>
+    {{ range $i, $p := .Particles }}
+    <g transform="translate({{f $p.X}} {{f $p.Y}})" fill="{{if eq (mod $i 3) 0}}{{$.Template.Accent}}{{else}}{{$.Template.Foreground}}{{end}}" opacity="{{f (add 0.25 (mul (modf (float $i) 4) 0.14))}}">
+      {{ if mod $i 2 }}
+      <circle r="{{f (div $p.Size 4)}}"/>
+      {{ else }}
+      <path d="M0 -11 L3 -3 L11 0 L3 3 L0 11 L-3 3 L-11 0 L-3 -3 Z"/>
+      {{ end }}
+    </g>
+    {{ end }}
+    <path d="M135 980 C315 900 590 1070 770 955" fill="none" stroke="{{.Template.Muted}}" stroke-width="4"/>
+  </g>
+
+  {{ template "highlight_layer" . }}
+  {{ template "main_text" . }}
+  {{ template "card_signature" . }}
+</svg>
+{{ end }}

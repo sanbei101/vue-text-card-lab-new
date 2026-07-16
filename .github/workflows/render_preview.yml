@@ -1,0 +1,102 @@
+name: Generate and Preview Cards
+
+on:
+  push:
+    branches: [ dev ]
+  workflow_dispatch:
+
+jobs:
+  build-and-render:
+    runs-on: ubuntu-latest
+    env:
+      GOEXPERIMENT: jsonv2
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: stable
+
+      - name: Install SVG Converter
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: librsvg2-bin
+          version: 1.0
+
+      - name: Install Python Dependencies
+        run: pip install requests
+
+      - name: Run Tests to Generate SVGs
+        run: go test -v ./...
+
+      - name: Convert, Upload and Post to Summary (Grid Layout)
+        env:
+          GRID_COLUMNS: 3
+          IMGBB_KEY: ${{ secrets.IMGBB_API_KEY }}
+        shell: python
+        run: |
+          import os
+          import glob
+          import subprocess
+          import requests
+          
+          summary_path = os.environ['GITHUB_STEP_SUMMARY']
+          api_key = os.environ['IMGBB_KEY']
+          target_dir = "testdata/all-templates"
+          
+          if not os.path.exists(target_dir):
+              print(f"目录 {target_dir} 不存在,跳过图片处理。")
+              exit(0)
+              
+          svg_files = glob.glob(os.path.join(target_dir, "*.svg"))
+          cells = []
+          
+          for svg_path in svg_files:
+              filename = os.path.basename(svg_path)
+              name = os.path.splitext(filename)[0]
+              png_path = os.path.join(target_dir, f"{name}.png")
+              
+              # 转成 PNG
+              subprocess.run(["rsvg-convert", "-o", png_path, svg_path])
+              
+              # 上传到 ImgBB
+              upload_url = "https://api.imgbb.com/1/upload"
+              params = {
+                  "key": api_key,
+                  "expiration": 604800 # 7天后自动删除
+              }
+              
+              try:
+                  with open(png_path, "rb") as img_file:
+                      files = {"image": img_file}
+                      response = requests.post(upload_url, params=params, files=files).json()
+                      
+                  if response.get("success"):
+                      img_url = response["data"]["image"]["url"]
+                      cells.append(f"![{name}]({img_url})<br>**{name}**")
+                  else:
+                      err_msg = response.get('error', {}).get('message', '上传失败')
+                      cells.append(f"❌ **{name}**<br><small>{err_msg}</small>")
+              except Exception as e:
+                  cells.append(f"❌ **{name}**<br><small>异常: {str(e)}</small>")
+          
+          COLUMNS_COUNT = int(os.environ.get("GRID_COLUMNS", 3))
+          
+          with open(summary_path, 'a', encoding='utf-8') as f:
+              f.write("## 📊 所有模板效果一览\n\n")
+              
+              if not cells:
+                  f.write("未找到生成的卡片图片。\n")
+                  exit(0)
+                  
+              f.write("| " + " | ".join([f"卡片预览" for _ in range(COLUMNS_COUNT)]) + " |\n")
+              f.write("| " + " | ".join(["---" for _ in range(COLUMNS_COUNT)]) + " |\n")
+              
+              for i in range(0, len(cells), COLUMNS_COUNT):
+                  row_cells = cells[i:i+COLUMNS_COUNT]
+                  # 如果最后一行图片不够填满列数，用空字符串补齐表格
+                  while len(row_cells) < COLUMNS_COUNT:
+                      row_cells.append("")
+                  f.write("| " + " | ".join(row_cells) + " |\n")
