@@ -1,11 +1,17 @@
 package server
 
 import (
-	"encoding/json/v2"
+	"context"
+	"errors"
 	"fmt"
 	"net/http"
+	"unicode/utf8"
 
+	"connectrpc.com/connect"
 	"github.com/phuslu/log"
+
+	cardenginev1 "github.com/sanbei101/blue-card-engine/gen/proto/cardengine/v1"
+	cardenginev1connect "github.com/sanbei101/blue-card-engine/gen/proto/cardengine/v1/cardenginev1connect"
 
 	"github.com/sanbei101/blue-card-engine/internal/cardengine"
 	"github.com/sanbei101/blue-card-engine/internal/fonts"
@@ -13,34 +19,12 @@ import (
 	"github.com/sanbei101/blue-card-engine/internal/templates"
 )
 
-type TemplateItem struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	Kind string `json:"kind"`
-}
-
-type TemplateListResponse struct {
-	Templates []TemplateItem `json:"templates"`
-}
-
-type CardItem struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	SVG  string `json:"svg"`
-}
-
-type CardListResponse struct {
-	Templates []CardItem `json:"templates"`
-}
-
-type ErrorResponse struct {
-	Error string `json:"error"`
-}
-
 type Handler struct {
 	templates *templates.Registry
 	library   *fonts.Library
 }
+
+var _ cardenginev1connect.CardEngineServiceHandler = (*Handler)(nil)
 
 func NewHandler(reg *templates.Registry, lib *fonts.Library) *Handler {
 	return &Handler{
@@ -51,8 +35,9 @@ func NewHandler(reg *templates.Registry, lib *fonts.Library) *Handler {
 
 func (h *Handler) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/health", h.health)
-	mux.HandleFunc("/api/cards", h.cards)
-	mux.HandleFunc("/api/templates", h.templateList)
+
+	path, handler := cardenginev1connect.NewCardEngineServiceHandler(h)
+	mux.Handle(path, handler)
 }
 
 func (h *Handler) health(w http.ResponseWriter, _ *http.Request) {
@@ -63,25 +48,40 @@ func (h *Handler) health(w http.ResponseWriter, _ *http.Request) {
 	}
 }
 
-func (h *Handler) templateList(w http.ResponseWriter, _ *http.Request) {
+func (h *Handler) TemplateList(
+	ctx context.Context,
+	req *cardenginev1.TemplateListRequest,
+) (*cardenginev1.TemplateListResponse, error) {
 	allTemplates := h.templates.All()
-	result := make([]TemplateItem, 0, len(allTemplates))
+	result := make([]*cardenginev1.TemplateItem, 0, len(allTemplates))
 
 	for i := range allTemplates {
 		tpl := &allTemplates[i]
-		result = append(result, TemplateItem{
-			ID:   tpl.ID,
-			Name: tpl.Name,
-			Kind: tpl.Kind,
-		})
-	}
+		item := &cardenginev1.TemplateItem{}
+		item.SetId(tpl.ID)
+		item.SetName(tpl.Name)
+		item.SetKind(tpl.Kind)
 
-	writeJSON(w, http.StatusOK, TemplateListResponse{Templates: result})
+		result = append(result, item)
+	}
+	resp := &cardenginev1.TemplateListResponse{}
+	resp.SetTemplates(result)
+	return resp, nil
 }
 
-func (h *Handler) cards(w http.ResponseWriter, r *http.Request) {
-	title := r.URL.Query().Get("title")
-	keyword := r.URL.Query().Get("keyword")
+func (h *Handler) Cards(
+	ctx context.Context,
+	req *cardenginev1.CardListRequest,
+) (*cardenginev1.CardListResponse, error) {
+	if utf8.RuneCountInString(req.GetTitle()) > 100 {
+		return nil, connect.NewError(
+			connect.CodeInvalidArgument,
+			errors.New("title length must be at most 100 characters"),
+		)
+	}
+	title := req.GetTitle()
+	keyword := req.GetKeyword()
+
 	if title == "" {
 		title = cardengine.DefaultEmptyText
 	}
@@ -90,32 +90,28 @@ func (h *Handler) cards(w http.ResponseWriter, r *http.Request) {
 	}
 
 	allTemplates := h.templates.All()
-	results := make([]CardItem, 0, len(allTemplates))
+	results := make([]*cardenginev1.CardItem, 0, len(allTemplates))
 
 	for i := range allTemplates {
 		tpl := &allTemplates[i]
 		svg, err := render.Card(tpl, title, keyword, h.library)
 		if err != nil {
-			writeJSON(w, http.StatusInternalServerError, ErrorResponse{
-				Error: fmt.Sprintf("render card %s failed", tpl.ID),
-			})
-			return
+			return nil, connect.NewError(
+				connect.CodeInternal,
+				fmt.Errorf("render card %s failed: %w", tpl.ID, err),
+			)
 		}
 
-		results = append(results, CardItem{
-			ID:   tpl.ID,
-			Name: tpl.Name,
-			SVG:  svg,
-		})
+		item := &cardenginev1.CardItem{}
+		item.SetId(tpl.ID)
+		item.SetName(tpl.Name)
+		item.SetSvg(svg)
+
+		results = append(results, item)
 	}
 
-	writeJSON(w, http.StatusOK, CardListResponse{Templates: results})
-}
+	resp := &cardenginev1.CardListResponse{}
+	resp.SetTemplates(results)
 
-func writeJSON(w http.ResponseWriter, status int, data any) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(status)
-	if err := json.MarshalWrite(w, data); err != nil {
-		log.Error().Err(err).Msg("write json response failed")
-	}
+	return resp, nil
 }

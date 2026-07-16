@@ -1,0 +1,35 @@
+edition = "2024";
+
+package cardengine.v1;
+
+message TemplateItem {
+  string id = 1;
+  string name = 2;
+  string kind = 3;
+}
+
+message TemplateListRequest {}
+
+message TemplateListResponse {
+  repeated TemplateItem templates = 1;
+}
+
+message CardItem {
+  string id = 1;
+  string name = 2;
+  string svg = 3;
+}
+
+message CardListRequest {
+  string title = 1;
+  string keyword = 2;
+}
+
+message CardListResponse {
+  repeated CardItem templates = 1;
+}
+
+service CardEngineService {
+  rpc TemplateList(TemplateListRequest) returns (TemplateListResponse) {}
+  rpc Cards(CardListRequest) returns (CardListResponse) {}
+}
