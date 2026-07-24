@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"crypto/sha256"
 	"errors"
 	"fmt"
 	"net/http"
@@ -20,17 +21,16 @@ import (
 )
 
 type Handler struct {
-	templates      *templates.Registry
-	library        *fonts.Library
-	svg2webpClient *render.Client
+	templates *templates.Registry
+	library   *fonts.Library
+	storage   *render.R2Storage
 }
 
-func NewHandler(reg *templates.Registry, lib *fonts.Library) *Handler {
-	client := render.NewClient("https://svg2webp.sanbei.codes")
+func NewHandler(reg *templates.Registry, lib *fonts.Library, storage *render.R2Storage) *Handler {
 	return &Handler{
-		templates:      reg,
-		library:        lib,
-		svg2webpClient: client,
+		templates: reg,
+		library:   lib,
+		storage:   storage,
 	}
 }
 
@@ -94,24 +94,33 @@ func (h *Handler) Cards(
 	results := make([]*cardenginev1.CardItem, 0, len(allTemplates))
 	for i := range allTemplates {
 		tpl := &allTemplates[i]
-		svg, err := render.Card(tpl, title, keyword, h.library)
+		svgBytes, err := render.Card(tpl, title, keyword, h.library)
 		if err != nil {
 			return nil, connect.NewError(
 				connect.CodeInternal,
 				fmt.Errorf("render template %s (%s): %w", tpl.Kind, tpl.ID, err),
 			)
 		}
-		svgURL, err := h.svg2webpClient.Convert(ctx, svg)
+		webpBytes, err := render.SVGToWebP(svgBytes)
 		if err != nil {
 			return nil, connect.NewError(
 				connect.CodeInternal,
-				fmt.Errorf("convert svg to webp for template %s (%s): %w", tpl.Kind, tpl.ID, err),
+				fmt.Errorf("convert SVG to WebP for template %s (%s): %w", tpl.Kind, tpl.ID, err),
+			)
+		}
+		hash := sha256.Sum256(webpBytes)
+		objectKey := fmt.Sprintf("cards/%s/%x.webp", tpl.ID, hash[:8])
+		svgURL, err := h.storage.UploadWebP(ctx, objectKey, webpBytes)
+		if err != nil {
+			return nil, connect.NewError(
+				connect.CodeInternal,
+				fmt.Errorf("upload WebP to R2 for template %s (%s): %w", tpl.Kind, tpl.ID, err),
 			)
 		}
 		item := &cardenginev1.CardItem{}
 		item.SetId(tpl.ID)
 		item.SetName(tpl.Kind)
-		item.SetUrl(svgURL.URL)
+		item.SetUrl(svgURL)
 
 		results = append(results, item)
 	}

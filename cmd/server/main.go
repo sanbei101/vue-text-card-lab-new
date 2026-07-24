@@ -5,9 +5,13 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/davidbyttow/govips/v2/vips"
+	"github.com/joho/godotenv"
 	"github.com/phuslu/log"
+	"github.com/purus-dev/aqua"
 
 	"github.com/sanbei101/blue-card-engine/internal/fonts"
+	"github.com/sanbei101/blue-card-engine/internal/render"
 	"github.com/sanbei101/blue-card-engine/internal/server"
 	"github.com/sanbei101/blue-card-engine/internal/templates"
 )
@@ -39,6 +43,25 @@ func initLog() {
 
 func main() {
 	initLog()
+	if err := godotenv.Load(); err != nil {
+		log.Fatal().Err(err).Msg("failed to load .env file")
+	}
+	vips.Startup(nil)
+	defer vips.Shutdown()
+
+	r2Config := aqua.Config{
+		AccessKeyID:     os.Getenv("R2_ACCESS_KEY_ID"),
+		AccessKeySecret: os.Getenv("R2_ACCESS_KEY_SECRET"),
+		Bucket:          os.Getenv("R2_BUCKET"),
+		Endpoint:        os.Getenv("R2_ENDPOINT"),
+		Region:          os.Getenv("R2_REGION"),
+	}
+
+	if err := r2Config.Validate(); err != nil {
+		log.Fatal().Err(err).Msg("invalid R2 configuration")
+	}
+
+	r2Storage := render.NewR2Storage(r2Config, "https://image-bed.sanbei.codes")
 	if closer, ok := log.DefaultLogger.Writer.(io.Closer); ok {
 		defer closer.Close()
 	}
@@ -53,7 +76,7 @@ func main() {
 		log.Fatal().Err(err).Msg("failed to load templates")
 	}
 
-	handler := server.NewHandler(reg, lib)
+	handler := server.NewHandler(reg, lib, r2Storage)
 	mux := http.NewServeMux()
 	handler.Register(mux)
 

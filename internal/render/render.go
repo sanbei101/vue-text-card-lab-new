@@ -91,7 +91,7 @@ type Particle struct {
 }
 
 // Card 根据模板、标题和关键词生成 SVG 字符串。
-func Card(tpl *templates.CardTemplate, title, keyword string, lib *fonts.Library) (string, error) {
+func Card(tpl *templates.CardTemplate, title, keyword string, lib *fonts.Library) ([]byte, error) {
 	title = strings.TrimSpace(title)
 	if title == "" {
 		title = cardengine.DefaultEmptyText
@@ -119,12 +119,12 @@ func Card(tpl *templates.CardTemplate, title, keyword string, lib *fonts.Library
 
 	lines, err := buildTextLines(lib, tpl, layout)
 	if err != nil {
-		return "", fmt.Errorf("build text lines: %w", err)
+		return nil, fmt.Errorf("build text lines: %w", err)
 	}
 
 	signaturePath, _, err := TextToPath(lib.SFNT(family), "此刻想说", 24)
 	if err != nil {
-		return "", fmt.Errorf("build signature path: %w", err)
+		return nil, fmt.Errorf("build signature path: %w", err)
 	}
 
 	data := Data{
@@ -140,9 +140,9 @@ func Card(tpl *templates.CardTemplate, title, keyword string, lib *fonts.Library
 
 	var buf bytes.Buffer
 	if err := tmpl.ExecuteTemplate(&buf, tpl.Kind, data); err != nil {
-		return "", fmt.Errorf("render template %s: %w", tpl.Kind, err)
+		return nil, fmt.Errorf("render template %s: %w", tpl.Kind, err)
 	}
-	return buf.String(), nil
+	return buf.Bytes(), nil
 }
 
 func buildTextLines(lib *fonts.Library, tpl *templates.CardTemplate, layout cardengine.TextLayout) ([]TextLine, error) {
