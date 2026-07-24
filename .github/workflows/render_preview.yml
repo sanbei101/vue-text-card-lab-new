@@ -29,7 +29,7 @@ jobs:
         run: pip install requests
 
       - name: Run Tests to Generate SVGs
-        run: go test -v ./...
+        run: go test -v -run "TestRenderCard_(SaveSample|AllTemplates)" ./internal/render
 
       - name: Convert, Upload and Post to Summary (Grid Layout)
         env:
