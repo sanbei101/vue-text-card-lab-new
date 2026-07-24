@@ -41,11 +41,27 @@ func initLog() {
 	}
 }
 
+func vipsLogHandler(messageDomain string, messageLevel vips.LogLevel, message string) {
+	switch messageLevel {
+	case vips.LogLevelError, vips.LogLevelCritical:
+		log.Error().Str("domain", messageDomain).Msg(message)
+	case vips.LogLevelWarning:
+		log.Warn().Str("domain", messageDomain).Msg(message)
+	case vips.LogLevelInfo, vips.LogLevelMessage:
+		log.Info().Str("domain", messageDomain).Msg(message)
+	case vips.LogLevelDebug:
+		log.Debug().Str("domain", messageDomain).Msg(message)
+	default:
+		log.Info().Str("domain", messageDomain).Msg(message)
+	}
+}
+
 func main() {
-	initLog()
 	if err := godotenv.Load(); err != nil {
 		log.Fatal().Err(err).Msg("failed to load .env file")
 	}
+	initLog()
+	vips.LoggingSettings(vipsLogHandler, vips.LogLevelInfo)
 	vips.Startup(nil)
 	defer vips.Shutdown()
 
@@ -55,6 +71,7 @@ func main() {
 		Bucket:          os.Getenv("R2_BUCKET"),
 		Endpoint:        os.Getenv("R2_ENDPOINT"),
 		Region:          os.Getenv("R2_REGION"),
+		UsePathStyle:    true,
 	}
 
 	if err := r2Config.Validate(); err != nil {

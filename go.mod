@@ -8,7 +8,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/phuslu/log v1.0.127
 	github.com/phuslu/lru v1.0.21
-	github.com/purus-dev/aqua v1.0.1
+	github.com/purus-dev/aqua v1.0.3
 	github.com/rivo/uniseg v0.4.7
 	golang.org/x/image v0.43.0
 	google.golang.org/protobuf v1.36.11
