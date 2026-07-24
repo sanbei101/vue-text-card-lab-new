@@ -1,7 +1,12 @@
 FROM golang:1.26-alpine AS build
 
+RUN apk add --no-cache \
+    build-base \
+    pkgconfig \
+    vips-dev
+
 ENV GOEXPERIMENT=jsonv2 \
-    CGO_ENABLED=0 \
+    CGO_ENABLED=1 \
     GOOS=linux \
     GOARCH=amd64
 
@@ -26,7 +31,7 @@ RUN apk add --no-cache \
     vips \
     ca-certificates \
     tzdata
-    
+
 USER 65532:65532
 
 ENV PORT=5174 \
