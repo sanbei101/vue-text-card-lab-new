@@ -58,7 +58,7 @@ func vipsLogHandler(messageDomain string, messageLevel vips.LogLevel, message st
 
 func main() {
 	if err := godotenv.Load(); err != nil {
-		log.Fatal().Err(err).Msg("failed to load .env file")
+		log.Info().Msg("No .env file found, using environment variables")
 	}
 	initLog()
 	vips.LoggingSettings(vipsLogHandler, vips.LogLevelInfo)
