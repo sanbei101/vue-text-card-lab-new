@@ -20,8 +20,13 @@ RUN --mount=type=cache,target=/go/pkg/mod \
         -o /out/server \
         ./cmd/server
 
-FROM scratch
+FROM alpine:latest AS runner
 
+RUN apk add --no-cache \
+    vips \
+    ca-certificates \
+    tzdata
+    
 USER 65532:65532
 
 ENV PORT=5174 \

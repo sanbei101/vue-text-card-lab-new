@@ -17,6 +17,7 @@ import (
 	"github.com/sanbei101/blue-card-engine/internal/cardengine"
 	"github.com/sanbei101/blue-card-engine/internal/fonts"
 	"github.com/sanbei101/blue-card-engine/internal/render"
+	"github.com/sanbei101/blue-card-engine/internal/render/webp"
 	"github.com/sanbei101/blue-card-engine/internal/templates"
 )
 
@@ -101,7 +102,7 @@ func (h *Handler) Cards(
 				fmt.Errorf("render template %s (%s): %w", tpl.Kind, tpl.ID, err),
 			)
 		}
-		webpBytes, err := render.SVGToWebP(svgBytes)
+		webpBytes, err := webp.SVGToWebP(svgBytes)
 		if err != nil {
 			return nil, connect.NewError(
 				connect.CodeInternal,
