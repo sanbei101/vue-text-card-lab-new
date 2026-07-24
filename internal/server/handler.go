@@ -20,14 +20,17 @@ import (
 )
 
 type Handler struct {
-	templates *templates.Registry
-	library   *fonts.Library
+	templates      *templates.Registry
+	library        *fonts.Library
+	svg2webpClient *render.Client
 }
 
 func NewHandler(reg *templates.Registry, lib *fonts.Library) *Handler {
+	client := render.NewClient("https://svg2webp.sanbei.codes")
 	return &Handler{
-		templates: reg,
-		library:   lib,
+		templates:      reg,
+		library:        lib,
+		svg2webpClient: client,
 	}
 }
 
@@ -89,23 +92,51 @@ func (h *Handler) Cards(
 
 	allTemplates := h.templates.All()
 	results := make([]*cardenginev1.CardItem, 0, len(allTemplates))
+	batchSize := 5
 
-	for i := range allTemplates {
-		tpl := &allTemplates[i]
-		svg, err := render.Card(tpl, title, keyword, h.library)
+	for i := 0; i < len(allTemplates); i += batchSize {
+		end := min(i+batchSize, len(allTemplates))
+		chunk := allTemplates[i:end]
+
+		batchItems := make([]render.BatchItem, 0, len(chunk))
+		for j := range chunk {
+			tpl := &chunk[j]
+			svg, err := render.Card(tpl, title, keyword, h.library)
+			if err != nil {
+				return nil, connect.NewError(
+					connect.CodeInternal,
+					fmt.Errorf("render card %s failed: %w", tpl.ID, err),
+				)
+			}
+			batchItems = append(batchItems, render.BatchItem{
+				Name: tpl.ID,
+				SVG:  svg,
+			})
+		}
+		batchResp, err := h.svg2webpClient.BatchConvert(ctx, batchItems)
 		if err != nil {
 			return nil, connect.NewError(
 				connect.CodeInternal,
-				fmt.Errorf("render card %s failed: %w", tpl.ID, err),
+				fmt.Errorf("batch convert svg to webp failed: %w", err),
 			)
 		}
+		for j, res := range batchResp.Results {
+			tpl := &chunk[j]
+			if !res.Success {
+				return nil, connect.NewError(
+					connect.CodeInternal,
+					fmt.Errorf("convert tpl %s failed: %s", tpl.ID, res.Error),
+				)
+			}
 
-		item := &cardenginev1.CardItem{}
-		item.SetId(tpl.ID)
-		item.SetName(tpl.Name)
-		item.SetSvg(svg)
+			item := &cardenginev1.CardItem{}
+			item.SetId(tpl.ID)
+			item.SetName(tpl.Name)
 
-		results = append(results, item)
+			item.SetUrl(res.URL)
+
+			results = append(results, item)
+		}
 	}
 
 	resp := &cardenginev1.CardListResponse{}

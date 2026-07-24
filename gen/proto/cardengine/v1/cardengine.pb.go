@@ -270,7 +270,7 @@ type CardItem struct {
 	state                  protoimpl.MessageState `protogen:"opaque.v1"`
 	xxx_hidden_Id          *string                `protobuf:"bytes,1,opt,name=id"`
 	xxx_hidden_Name        *string                `protobuf:"bytes,2,opt,name=name"`
-	xxx_hidden_Svg         *string                `protobuf:"bytes,3,opt,name=svg"`
+	xxx_hidden_Url         *string                `protobuf:"bytes,3,opt,name=url"`
 	XXX_raceDetectHookData protoimpl.RaceDetectHookData
 	XXX_presence           [1]uint32
 	unknownFields          protoimpl.UnknownFields
@@ -322,10 +322,10 @@ func (x *CardItem) GetName() string {
 	return ""
 }
 
-func (x *CardItem) GetSvg() string {
+func (x *CardItem) GetUrl() string {
 	if x != nil {
-		if x.xxx_hidden_Svg != nil {
-			return *x.xxx_hidden_Svg
+		if x.xxx_hidden_Url != nil {
+			return *x.xxx_hidden_Url
 		}
 		return ""
 	}
@@ -342,8 +342,8 @@ func (x *CardItem) SetName(v string) {
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 3)
 }
 
-func (x *CardItem) SetSvg(v string) {
-	x.xxx_hidden_Svg = &v
+func (x *CardItem) SetUrl(v string) {
+	x.xxx_hidden_Url = &v
 	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 3)
 }
 
@@ -361,7 +361,7 @@ func (x *CardItem) HasName() bool {
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 1)
 }
 
-func (x *CardItem) HasSvg() bool {
+func (x *CardItem) HasUrl() bool {
 	if x == nil {
 		return false
 	}
@@ -378,9 +378,9 @@ func (x *CardItem) ClearName() {
 	x.xxx_hidden_Name = nil
 }
 
-func (x *CardItem) ClearSvg() {
+func (x *CardItem) ClearUrl() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 2)
-	x.xxx_hidden_Svg = nil
+	x.xxx_hidden_Url = nil
 }
 
 type CardItem_builder struct {
@@ -388,7 +388,7 @@ type CardItem_builder struct {
 
 	Id   *string
 	Name *string
-	Svg  *string
+	Url  *string
 }
 
 func (b0 CardItem_builder) Build() *CardItem {
@@ -403,9 +403,9 @@ func (b0 CardItem_builder) Build() *CardItem {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 3)
 		x.xxx_hidden_Name = b.Name
 	}
-	if b.Svg != nil {
+	if b.Url != nil {
 		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 3)
-		x.xxx_hidden_Svg = b.Svg
+		x.xxx_hidden_Url = b.Url
 	}
 	return m0
 }
@@ -595,7 +595,7 @@ const file_proto_cardengine_v1_cardengine_proto_rawDesc = "" +
 	"\bCardItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x10\n" +
-	"\x03svg\x18\x03 \x01(\tR\x03svg\"A\n" +
+	"\x03url\x18\x03 \x01(\tR\x03url\"A\n" +
 	"\x0fCardListRequest\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12\x18\n" +
 	"\akeyword\x18\x02 \x01(\tR\akeyword\"I\n" +

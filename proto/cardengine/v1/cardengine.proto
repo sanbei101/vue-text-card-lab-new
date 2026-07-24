@@ -17,7 +17,7 @@ message TemplateListResponse {
 message CardItem {
   string id = 1;
   string name = 2;
-  string svg = 3;
+  string url = 3;
 }
 
 message CardListRequest {
