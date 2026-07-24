@@ -92,51 +92,28 @@ func (h *Handler) Cards(
 
 	allTemplates := h.templates.All()
 	results := make([]*cardenginev1.CardItem, 0, len(allTemplates))
-	batchSize := 5
-
-	for i := 0; i < len(allTemplates); i += batchSize {
-		end := min(i+batchSize, len(allTemplates))
-		chunk := allTemplates[i:end]
-
-		batchItems := make([]render.BatchItem, 0, len(chunk))
-		for j := range chunk {
-			tpl := &chunk[j]
-			svg, err := render.Card(tpl, title, keyword, h.library)
-			if err != nil {
-				return nil, connect.NewError(
-					connect.CodeInternal,
-					fmt.Errorf("render card %s failed: %w", tpl.ID, err),
-				)
-			}
-			batchItems = append(batchItems, render.BatchItem{
-				Name: tpl.ID,
-				SVG:  svg,
-			})
-		}
-		batchResp, err := h.svg2webpClient.BatchConvert(ctx, batchItems)
+	for i := range allTemplates {
+		tpl := &allTemplates[i]
+		svg, err := render.Card(tpl, title, keyword, h.library)
 		if err != nil {
 			return nil, connect.NewError(
 				connect.CodeInternal,
-				fmt.Errorf("batch convert svg to webp failed: %w", err),
+				fmt.Errorf("render template %s (%s): %w", tpl.Kind, tpl.ID, err),
 			)
 		}
-		for j, res := range batchResp.Results {
-			tpl := &chunk[j]
-			if !res.Success {
-				return nil, connect.NewError(
-					connect.CodeInternal,
-					fmt.Errorf("convert tpl %s failed: %s", tpl.ID, res.Error),
-				)
-			}
-
-			item := &cardenginev1.CardItem{}
-			item.SetId(tpl.ID)
-			item.SetName(tpl.Name)
-
-			item.SetUrl(res.URL)
-
-			results = append(results, item)
+		svgURL, err := h.svg2webpClient.Convert(ctx, svg)
+		if err != nil {
+			return nil, connect.NewError(
+				connect.CodeInternal,
+				fmt.Errorf("convert svg to webp for template %s (%s): %w", tpl.Kind, tpl.ID, err),
+			)
 		}
+		item := &cardenginev1.CardItem{}
+		item.SetId(tpl.ID)
+		item.SetName(tpl.Kind)
+		item.SetUrl(svgURL.URL)
+
+		results = append(results, item)
 	}
 
 	resp := &cardenginev1.CardListResponse{}
