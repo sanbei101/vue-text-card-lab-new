@@ -410,30 +410,31 @@ func (b0 CardItem_builder) Build() *CardItem {
 	return m0
 }
 
-type CardListRequest struct {
+type CardsListRequest struct {
 	state                  protoimpl.MessageState `protogen:"opaque.v1"`
 	xxx_hidden_Title       *string                `protobuf:"bytes,1,opt,name=title"`
 	xxx_hidden_Keyword     *string                `protobuf:"bytes,2,opt,name=keyword"`
+	xxx_hidden_TemplateIds []string               `protobuf:"bytes,3,rep,name=template_ids,json=templateIds"`
 	XXX_raceDetectHookData protoimpl.RaceDetectHookData
 	XXX_presence           [1]uint32
 	unknownFields          protoimpl.UnknownFields
 	sizeCache              protoimpl.SizeCache
 }
 
-func (x *CardListRequest) Reset() {
-	*x = CardListRequest{}
+func (x *CardsListRequest) Reset() {
+	*x = CardsListRequest{}
 	mi := &file_proto_cardengine_v1_cardengine_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CardListRequest) String() string {
+func (x *CardsListRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CardListRequest) ProtoMessage() {}
+func (*CardsListRequest) ProtoMessage() {}
 
-func (x *CardListRequest) ProtoReflect() protoreflect.Message {
+func (x *CardsListRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_cardengine_v1_cardengine_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -445,7 +446,7 @@ func (x *CardListRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-func (x *CardListRequest) GetTitle() string {
+func (x *CardsListRequest) GetTitle() string {
 	if x != nil {
 		if x.xxx_hidden_Title != nil {
 			return *x.xxx_hidden_Title
@@ -455,7 +456,7 @@ func (x *CardListRequest) GetTitle() string {
 	return ""
 }
 
-func (x *CardListRequest) GetKeyword() string {
+func (x *CardsListRequest) GetKeyword() string {
 	if x != nil {
 		if x.xxx_hidden_Keyword != nil {
 			return *x.xxx_hidden_Keyword
@@ -465,83 +466,96 @@ func (x *CardListRequest) GetKeyword() string {
 	return ""
 }
 
-func (x *CardListRequest) SetTitle(v string) {
+func (x *CardsListRequest) GetTemplateIds() []string {
+	if x != nil {
+		return x.xxx_hidden_TemplateIds
+	}
+	return nil
+}
+
+func (x *CardsListRequest) SetTitle(v string) {
 	x.xxx_hidden_Title = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 2)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 3)
 }
 
-func (x *CardListRequest) SetKeyword(v string) {
+func (x *CardsListRequest) SetKeyword(v string) {
 	x.xxx_hidden_Keyword = &v
-	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 2)
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 3)
 }
 
-func (x *CardListRequest) HasTitle() bool {
+func (x *CardsListRequest) SetTemplateIds(v []string) {
+	x.xxx_hidden_TemplateIds = v
+}
+
+func (x *CardsListRequest) HasTitle() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 0)
 }
 
-func (x *CardListRequest) HasKeyword() bool {
+func (x *CardsListRequest) HasKeyword() bool {
 	if x == nil {
 		return false
 	}
 	return protoimpl.X.Present(&(x.XXX_presence[0]), 1)
 }
 
-func (x *CardListRequest) ClearTitle() {
+func (x *CardsListRequest) ClearTitle() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 0)
 	x.xxx_hidden_Title = nil
 }
 
-func (x *CardListRequest) ClearKeyword() {
+func (x *CardsListRequest) ClearKeyword() {
 	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 1)
 	x.xxx_hidden_Keyword = nil
 }
 
-type CardListRequest_builder struct {
+type CardsListRequest_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
-	Title   *string
-	Keyword *string
+	Title       *string
+	Keyword     *string
+	TemplateIds []string
 }
 
-func (b0 CardListRequest_builder) Build() *CardListRequest {
-	m0 := &CardListRequest{}
+func (b0 CardsListRequest_builder) Build() *CardsListRequest {
+	m0 := &CardsListRequest{}
 	b, x := &b0, m0
 	_, _ = b, x
 	if b.Title != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 2)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 3)
 		x.xxx_hidden_Title = b.Title
 	}
 	if b.Keyword != nil {
-		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 2)
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 3)
 		x.xxx_hidden_Keyword = b.Keyword
 	}
+	x.xxx_hidden_TemplateIds = b.TemplateIds
 	return m0
 }
 
-type CardListResponse struct {
+type CardsListResponse struct {
 	state                protoimpl.MessageState `protogen:"opaque.v1"`
 	xxx_hidden_Templates *[]*CardItem           `protobuf:"bytes,1,rep,name=templates"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
 
-func (x *CardListResponse) Reset() {
-	*x = CardListResponse{}
+func (x *CardsListResponse) Reset() {
+	*x = CardsListResponse{}
 	mi := &file_proto_cardengine_v1_cardengine_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CardListResponse) String() string {
+func (x *CardsListResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CardListResponse) ProtoMessage() {}
+func (*CardsListResponse) ProtoMessage() {}
 
-func (x *CardListResponse) ProtoReflect() protoreflect.Message {
+func (x *CardsListResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_cardengine_v1_cardengine_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -553,7 +567,7 @@ func (x *CardListResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-func (x *CardListResponse) GetTemplates() []*CardItem {
+func (x *CardsListResponse) GetTemplates() []*CardItem {
 	if x != nil {
 		if x.xxx_hidden_Templates != nil {
 			return *x.xxx_hidden_Templates
@@ -562,18 +576,18 @@ func (x *CardListResponse) GetTemplates() []*CardItem {
 	return nil
 }
 
-func (x *CardListResponse) SetTemplates(v []*CardItem) {
+func (x *CardsListResponse) SetTemplates(v []*CardItem) {
 	x.xxx_hidden_Templates = &v
 }
 
-type CardListResponse_builder struct {
+type CardsListResponse_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
 	Templates []*CardItem
 }
 
-func (b0 CardListResponse_builder) Build() *CardListResponse {
-	m0 := &CardListResponse{}
+func (b0 CardsListResponse_builder) Build() *CardsListResponse {
+	m0 := &CardsListResponse{}
 	b, x := &b0, m0
 	_, _ = b, x
 	x.xxx_hidden_Templates = &b.Templates
@@ -584,44 +598,45 @@ var File_proto_cardengine_v1_cardengine_proto protoreflect.FileDescriptor
 
 const file_proto_cardengine_v1_cardengine_proto_rawDesc = "" +
 	"\n" +
-	"$proto/cardengine/v1/cardengine.proto\x12\rcardengine.v1\"F\n" +
+	"$proto/cardengine/v1/cardengine.proto\x12\x13proto.cardengine.v1\"F\n" +
 	"\fTemplateItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
 	"\x04kind\x18\x03 \x01(\tR\x04kind\"\x15\n" +
-	"\x13TemplateListRequest\"Q\n" +
-	"\x14TemplateListResponse\x129\n" +
-	"\ttemplates\x18\x01 \x03(\v2\x1b.cardengine.v1.TemplateItemR\ttemplates\"@\n" +
+	"\x13TemplateListRequest\"W\n" +
+	"\x14TemplateListResponse\x12?\n" +
+	"\ttemplates\x18\x01 \x03(\v2!.proto.cardengine.v1.TemplateItemR\ttemplates\"@\n" +
 	"\bCardItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x10\n" +
-	"\x03url\x18\x03 \x01(\tR\x03url\"A\n" +
-	"\x0fCardListRequest\x12\x14\n" +
+	"\x03url\x18\x03 \x01(\tR\x03url\"e\n" +
+	"\x10CardsListRequest\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12\x18\n" +
-	"\akeyword\x18\x02 \x01(\tR\akeyword\"I\n" +
-	"\x10CardListResponse\x125\n" +
-	"\ttemplates\x18\x01 \x03(\v2\x17.cardengine.v1.CardItemR\ttemplates2\xba\x01\n" +
-	"\x11CardEngineService\x12Y\n" +
-	"\fTemplateList\x12\".cardengine.v1.TemplateListRequest\x1a#.cardengine.v1.TemplateListResponse\"\x00\x12J\n" +
-	"\x05Cards\x12\x1e.cardengine.v1.CardListRequest\x1a\x1f.cardengine.v1.CardListResponse\"\x00B\xc5\x01\n" +
-	"\x11com.cardengine.v1B\x0fCardengineProtoP\x01ZJgithub.com/sanbei101/blue-card-engine/gen/proto/cardengine/v1;cardenginev1\xa2\x02\x03CXX\xaa\x02\rCardengine.V1\xca\x02\rCardengine\\V1\xe2\x02\x19Cardengine\\V1\\GPBMetadata\xea\x02\x0eCardengine::V1b\beditionsp\xe9\a"
+	"\akeyword\x18\x02 \x01(\tR\akeyword\x12!\n" +
+	"\ftemplate_ids\x18\x03 \x03(\tR\vtemplateIds\"P\n" +
+	"\x11CardsListResponse\x12;\n" +
+	"\ttemplates\x18\x01 \x03(\v2\x1d.proto.cardengine.v1.CardItemR\ttemplates2\xd8\x01\n" +
+	"\x11CardEngineService\x12e\n" +
+	"\fTemplateList\x12(.proto.cardengine.v1.TemplateListRequest\x1a).proto.cardengine.v1.TemplateListResponse\"\x00\x12\\\n" +
+	"\tCardsList\x12%.proto.cardengine.v1.CardsListRequest\x1a&.proto.cardengine.v1.CardsListResponse\"\x00B\xe4\x01\n" +
+	"\x17com.proto.cardengine.v1B\x0fCardengineProtoP\x01ZJgithub.com/sanbei101/blue-card-engine/gen/proto/cardengine/v1;cardenginev1\xa2\x02\x03PCX\xaa\x02\x13Proto.Cardengine.V1\xca\x02\x13Proto\\Cardengine\\V1\xe2\x02\x1fProto\\Cardengine\\V1\\GPBMetadata\xea\x02\x15Proto::Cardengine::V1b\beditionsp\xe9\a"
 
 var file_proto_cardengine_v1_cardengine_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_proto_cardengine_v1_cardengine_proto_goTypes = []any{
-	(*TemplateItem)(nil),         // 0: cardengine.v1.TemplateItem
-	(*TemplateListRequest)(nil),  // 1: cardengine.v1.TemplateListRequest
-	(*TemplateListResponse)(nil), // 2: cardengine.v1.TemplateListResponse
-	(*CardItem)(nil),             // 3: cardengine.v1.CardItem
-	(*CardListRequest)(nil),      // 4: cardengine.v1.CardListRequest
-	(*CardListResponse)(nil),     // 5: cardengine.v1.CardListResponse
+	(*TemplateItem)(nil),         // 0: proto.cardengine.v1.TemplateItem
+	(*TemplateListRequest)(nil),  // 1: proto.cardengine.v1.TemplateListRequest
+	(*TemplateListResponse)(nil), // 2: proto.cardengine.v1.TemplateListResponse
+	(*CardItem)(nil),             // 3: proto.cardengine.v1.CardItem
+	(*CardsListRequest)(nil),     // 4: proto.cardengine.v1.CardsListRequest
+	(*CardsListResponse)(nil),    // 5: proto.cardengine.v1.CardsListResponse
 }
 var file_proto_cardengine_v1_cardengine_proto_depIdxs = []int32{
-	0, // 0: cardengine.v1.TemplateListResponse.templates:type_name -> cardengine.v1.TemplateItem
-	3, // 1: cardengine.v1.CardListResponse.templates:type_name -> cardengine.v1.CardItem
-	1, // 2: cardengine.v1.CardEngineService.TemplateList:input_type -> cardengine.v1.TemplateListRequest
-	4, // 3: cardengine.v1.CardEngineService.Cards:input_type -> cardengine.v1.CardListRequest
-	2, // 4: cardengine.v1.CardEngineService.TemplateList:output_type -> cardengine.v1.TemplateListResponse
-	5, // 5: cardengine.v1.CardEngineService.Cards:output_type -> cardengine.v1.CardListResponse
+	0, // 0: proto.cardengine.v1.TemplateListResponse.templates:type_name -> proto.cardengine.v1.TemplateItem
+	3, // 1: proto.cardengine.v1.CardsListResponse.templates:type_name -> proto.cardengine.v1.CardItem
+	1, // 2: proto.cardengine.v1.CardEngineService.TemplateList:input_type -> proto.cardengine.v1.TemplateListRequest
+	4, // 3: proto.cardengine.v1.CardEngineService.CardsList:input_type -> proto.cardengine.v1.CardsListRequest
+	2, // 4: proto.cardengine.v1.CardEngineService.TemplateList:output_type -> proto.cardengine.v1.TemplateListResponse
+	5, // 5: proto.cardengine.v1.CardEngineService.CardsList:output_type -> proto.cardengine.v1.CardsListResponse
 	4, // [4:6] is the sub-list for method output_type
 	2, // [2:4] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name

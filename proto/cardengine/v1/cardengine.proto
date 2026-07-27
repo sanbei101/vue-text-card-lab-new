@@ -1,6 +1,6 @@
 edition = "2024";
 
-package cardengine.v1;
+package proto.cardengine.v1;
 
 message TemplateItem {
   string id = 1;
@@ -20,16 +20,17 @@ message CardItem {
   string url = 3;
 }
 
-message CardListRequest {
+message CardsListRequest {
   string title = 1;
   string keyword = 2;
+  repeated string template_ids = 3;
 }
 
-message CardListResponse {
+message CardsListResponse {
   repeated CardItem templates = 1;
 }
 
 service CardEngineService {
   rpc TemplateList(TemplateListRequest) returns (TemplateListResponse) {}
-  rpc Cards(CardListRequest) returns (CardListResponse) {}
+  rpc CardsList(CardsListRequest) returns (CardsListResponse) {}
 }

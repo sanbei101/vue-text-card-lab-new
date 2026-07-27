@@ -22,7 +22,7 @@ const _ = connect.IsAtLeastVersion1_13_0
 
 const (
 	// CardEngineServiceName is the fully-qualified name of the CardEngineService service.
-	CardEngineServiceName = "cardengine.v1.CardEngineService"
+	CardEngineServiceName = "proto.cardengine.v1.CardEngineService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -35,21 +35,22 @@ const (
 const (
 	// CardEngineServiceTemplateListProcedure is the fully-qualified name of the CardEngineService's
 	// TemplateList RPC.
-	CardEngineServiceTemplateListProcedure = "/cardengine.v1.CardEngineService/TemplateList"
-	// CardEngineServiceCardsProcedure is the fully-qualified name of the CardEngineService's Cards RPC.
-	CardEngineServiceCardsProcedure = "/cardengine.v1.CardEngineService/Cards"
+	CardEngineServiceTemplateListProcedure = "/proto.cardengine.v1.CardEngineService/TemplateList"
+	// CardEngineServiceCardsListProcedure is the fully-qualified name of the CardEngineService's
+	// CardsList RPC.
+	CardEngineServiceCardsListProcedure = "/proto.cardengine.v1.CardEngineService/CardsList"
 )
 
-// CardEngineServiceClient is a client for the cardengine.v1.CardEngineService service.
+// CardEngineServiceClient is a client for the proto.cardengine.v1.CardEngineService service.
 type CardEngineServiceClient interface {
 	TemplateList(context.Context, *v1.TemplateListRequest) (*v1.TemplateListResponse, error)
-	Cards(context.Context, *v1.CardListRequest) (*v1.CardListResponse, error)
+	CardsList(context.Context, *v1.CardsListRequest) (*v1.CardsListResponse, error)
 }
 
-// NewCardEngineServiceClient constructs a client for the cardengine.v1.CardEngineService service.
-// By default, it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped
-// responses, and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the
-// connect.WithGRPC() or connect.WithGRPCWeb() options.
+// NewCardEngineServiceClient constructs a client for the proto.cardengine.v1.CardEngineService
+// service. By default, it uses the Connect protocol with the binary Protobuf Codec, asks for
+// gzipped responses, and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply
+// the connect.WithGRPC() or connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
@@ -63,10 +64,10 @@ func NewCardEngineServiceClient(httpClient connect.HTTPClient, baseURL string, o
 			connect.WithSchema(cardEngineServiceMethods.ByName("TemplateList")),
 			connect.WithClientOptions(opts...),
 		),
-		cards: connect.NewClient[v1.CardListRequest, v1.CardListResponse](
+		cardsList: connect.NewClient[v1.CardsListRequest, v1.CardsListResponse](
 			httpClient,
-			baseURL+CardEngineServiceCardsProcedure,
-			connect.WithSchema(cardEngineServiceMethods.ByName("Cards")),
+			baseURL+CardEngineServiceCardsListProcedure,
+			connect.WithSchema(cardEngineServiceMethods.ByName("CardsList")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -75,10 +76,10 @@ func NewCardEngineServiceClient(httpClient connect.HTTPClient, baseURL string, o
 // cardEngineServiceClient implements CardEngineServiceClient.
 type cardEngineServiceClient struct {
 	templateList *connect.Client[v1.TemplateListRequest, v1.TemplateListResponse]
-	cards        *connect.Client[v1.CardListRequest, v1.CardListResponse]
+	cardsList    *connect.Client[v1.CardsListRequest, v1.CardsListResponse]
 }
 
-// TemplateList calls cardengine.v1.CardEngineService.TemplateList.
+// TemplateList calls proto.cardengine.v1.CardEngineService.TemplateList.
 func (c *cardEngineServiceClient) TemplateList(ctx context.Context, req *v1.TemplateListRequest) (*v1.TemplateListResponse, error) {
 	response, err := c.templateList.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
@@ -87,19 +88,20 @@ func (c *cardEngineServiceClient) TemplateList(ctx context.Context, req *v1.Temp
 	return nil, err
 }
 
-// Cards calls cardengine.v1.CardEngineService.Cards.
-func (c *cardEngineServiceClient) Cards(ctx context.Context, req *v1.CardListRequest) (*v1.CardListResponse, error) {
-	response, err := c.cards.CallUnary(ctx, connect.NewRequest(req))
+// CardsList calls proto.cardengine.v1.CardEngineService.CardsList.
+func (c *cardEngineServiceClient) CardsList(ctx context.Context, req *v1.CardsListRequest) (*v1.CardsListResponse, error) {
+	response, err := c.cardsList.CallUnary(ctx, connect.NewRequest(req))
 	if response != nil {
 		return response.Msg, err
 	}
 	return nil, err
 }
 
-// CardEngineServiceHandler is an implementation of the cardengine.v1.CardEngineService service.
+// CardEngineServiceHandler is an implementation of the proto.cardengine.v1.CardEngineService
+// service.
 type CardEngineServiceHandler interface {
 	TemplateList(context.Context, *v1.TemplateListRequest) (*v1.TemplateListResponse, error)
-	Cards(context.Context, *v1.CardListRequest) (*v1.CardListResponse, error)
+	CardsList(context.Context, *v1.CardsListRequest) (*v1.CardsListResponse, error)
 }
 
 // NewCardEngineServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -115,18 +117,18 @@ func NewCardEngineServiceHandler(svc CardEngineServiceHandler, opts ...connect.H
 		connect.WithSchema(cardEngineServiceMethods.ByName("TemplateList")),
 		connect.WithHandlerOptions(opts...),
 	)
-	cardEngineServiceCardsHandler := connect.NewUnaryHandlerSimple(
-		CardEngineServiceCardsProcedure,
-		svc.Cards,
-		connect.WithSchema(cardEngineServiceMethods.ByName("Cards")),
+	cardEngineServiceCardsListHandler := connect.NewUnaryHandlerSimple(
+		CardEngineServiceCardsListProcedure,
+		svc.CardsList,
+		connect.WithSchema(cardEngineServiceMethods.ByName("CardsList")),
 		connect.WithHandlerOptions(opts...),
 	)
-	return "/cardengine.v1.CardEngineService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/proto.cardengine.v1.CardEngineService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case CardEngineServiceTemplateListProcedure:
 			cardEngineServiceTemplateListHandler.ServeHTTP(w, r)
-		case CardEngineServiceCardsProcedure:
-			cardEngineServiceCardsHandler.ServeHTTP(w, r)
+		case CardEngineServiceCardsListProcedure:
+			cardEngineServiceCardsListHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -137,9 +139,9 @@ func NewCardEngineServiceHandler(svc CardEngineServiceHandler, opts ...connect.H
 type UnimplementedCardEngineServiceHandler struct{}
 
 func (UnimplementedCardEngineServiceHandler) TemplateList(context.Context, *v1.TemplateListRequest) (*v1.TemplateListResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cardengine.v1.CardEngineService.TemplateList is not implemented"))
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("proto.cardengine.v1.CardEngineService.TemplateList is not implemented"))
 }
 
-func (UnimplementedCardEngineServiceHandler) Cards(context.Context, *v1.CardListRequest) (*v1.CardListResponse, error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cardengine.v1.CardEngineService.Cards is not implemented"))
+func (UnimplementedCardEngineServiceHandler) CardsList(context.Context, *v1.CardsListRequest) (*v1.CardsListResponse, error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("proto.cardengine.v1.CardEngineService.CardsList is not implemented"))
 }

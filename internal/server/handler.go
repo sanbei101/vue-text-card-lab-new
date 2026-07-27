@@ -71,10 +71,10 @@ func (h *Handler) TemplateList(
 	return resp, nil
 }
 
-func (h *Handler) Cards(
+func (h *Handler) CardsList(
 	ctx context.Context,
-	req *cardenginev1.CardListRequest,
-) (*cardenginev1.CardListResponse, error) {
+	req *cardenginev1.CardsListRequest,
+) (*cardenginev1.CardsListResponse, error) {
 	if utf8.RuneCountInString(req.GetTitle()) > 100 {
 		return nil, connect.NewError(
 			connect.CodeInvalidArgument,
@@ -91,10 +91,27 @@ func (h *Handler) Cards(
 		keyword = cardengine.InferKeyword(title)
 	}
 
-	allTemplates := h.templates.All()
-	results := make([]*cardenginev1.CardItem, 0, len(allTemplates))
-	for i := range allTemplates {
-		tpl := &allTemplates[i]
+	// 根据 template_ids 过滤模板
+	var targetTemplates []templates.CardTemplate
+	if ids := req.GetTemplateIds(); len(ids) > 0 {
+		targetTemplates = make([]templates.CardTemplate, 0, len(ids))
+		for _, id := range ids {
+			tpl, ok := h.templates.ByID(id)
+			if !ok {
+				return nil, connect.NewError(
+					connect.CodeInvalidArgument,
+					fmt.Errorf("template %q not found", id),
+				)
+			}
+			targetTemplates = append(targetTemplates, tpl)
+		}
+	} else {
+		targetTemplates = h.templates.All()
+	}
+
+	results := make([]*cardenginev1.CardItem, 0, len(targetTemplates))
+	for i := range targetTemplates {
+		tpl := &targetTemplates[i]
 		svgBytes, err := render.Card(tpl, title, keyword, h.library)
 		if err != nil {
 			return nil, connect.NewError(
@@ -126,7 +143,7 @@ func (h *Handler) Cards(
 		results = append(results, item)
 	}
 
-	resp := &cardenginev1.CardListResponse{}
+	resp := &cardenginev1.CardsListResponse{}
 	resp.SetTemplates(results)
 
 	return resp, nil
