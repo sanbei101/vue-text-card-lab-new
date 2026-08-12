@@ -4,14 +4,13 @@ on:
   push:
     tags: ["v*.*.*"]
   workflow_dispatch:
+permissions:
+  contents: write
+  packages: write
 
 jobs:
-  build-and-push:
+  build-docker:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
-
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -49,10 +48,21 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  build-binary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: stable
+
       - name: Install dependencies with cache
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: libvips-dev
+          packages: libvips-dev pkg-config
           version: 1.0
 
       - name: Build Linux binary
