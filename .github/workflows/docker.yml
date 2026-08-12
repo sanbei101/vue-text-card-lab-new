@@ -1,4 +1,4 @@
-name: Build Docker Image
+name: Build and Release
 
 on:
   push:
@@ -39,7 +39,7 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
-        
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
@@ -48,3 +48,11 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Build Linux binary
+        run: go build -trimpath -ldflags="-s -w" -o /out/blue-card-render ./cmd/server
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: /out/blue-card-render
