@@ -59,11 +59,10 @@ jobs:
         with:
           go-version: stable
 
-      - name: Install dependencies with cache
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: libvips-dev pkg-config
-          version: 1.0
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y libvips-dev pkg-config
 
       - name: Build Linux binary
         run: go build -trimpath -ldflags="-s -w" -o /tmp/blue-card-render ./cmd/server
