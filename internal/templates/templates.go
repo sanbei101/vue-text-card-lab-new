@@ -44,7 +44,7 @@ var builtinTemplates = []CardTemplate{
 		Foreground: "#093c4a",
 		Accent:     "#ffe23b",
 		Muted:      "#9fd4e6",
-		FontFamily: fonts.FontZCOOLXiaoWei,
+		FontFamily: fonts.FontHarmonyOS,
 		FontWeight: 800,
 		Radius:     54,
 		TextBox: TextBoxSpec{
@@ -61,7 +61,7 @@ var builtinTemplates = []CardTemplate{
 		Foreground: "#202018",
 		Accent:     "#ff6b35",
 		Muted:      "#d8b94f",
-		FontFamily: fonts.FontMaShanZheng,
+		FontFamily: fonts.FontHarmonyOS,
 		FontWeight: 750,
 		Radius:     28,
 		TextBox: TextBoxSpec{
@@ -78,7 +78,7 @@ var builtinTemplates = []CardTemplate{
 		Foreground: "#101010",
 		Accent:     "#ef4136",
 		Muted:      "#b6b1a8",
-		FontFamily: fonts.FontZCOOLKuaiLe,
+		FontFamily: fonts.FontHarmonyOS,
 		FontWeight: 800,
 		Radius:     0,
 		TextBox: TextBoxSpec{
@@ -95,7 +95,7 @@ var builtinTemplates = []CardTemplate{
 		Foreground: "#30245f",
 		Accent:     "#8f68ff",
 		Muted:      "#c7b9f5",
-		FontFamily: fonts.FontLongCang,
+		FontFamily: fonts.FontHarmonyOS,
 		FontWeight: 760,
 		Radius:     72,
 		TextBox: TextBoxSpec{
@@ -112,7 +112,7 @@ var builtinTemplates = []CardTemplate{
 		Foreground: "#23452e",
 		Accent:     "#ff7a59",
 		Muted:      "#a8c69c",
-		FontFamily: fonts.FontZCOOLQingKeHuangYou,
+		FontFamily: fonts.FontHarmonyOS,
 		FontWeight: 760,
 		Radius:     42,
 		TextBox: TextBoxSpec{
@@ -129,7 +129,7 @@ var builtinTemplates = []CardTemplate{
 		Foreground: "#7d201b",
 		Accent:     "#e83a2f",
 		Muted:      "#e0a298",
-		FontFamily: fonts.FontLongCang,
+		FontFamily: fonts.FontHarmonyOS,
 		FontWeight: 900,
 		Radius:     24,
 		TextBox: TextBoxSpec{
@@ -146,7 +146,7 @@ var builtinTemplates = []CardTemplate{
 		Foreground: "#173f7a",
 		Accent:     "#3978ff",
 		Muted:      "#b8cff5",
-		FontFamily: fonts.FontZCOOLXiaoWei,
+		FontFamily: fonts.FontHarmonyOS,
 		FontWeight: 780,
 		Radius:     40,
 		TextBox: TextBoxSpec{
@@ -163,7 +163,7 @@ var builtinTemplates = []CardTemplate{
 		Foreground: "#f6f1d8",
 		Accent:     "#ffcc4d",
 		Muted:      "#6a7399",
-		FontFamily: fonts.FontZCOOLQingKeHuangYou,
+		FontFamily: fonts.FontHarmonyOS,
 		FontWeight: 740,
 		Radius:     58,
 		TextBox: TextBoxSpec{
@@ -180,7 +180,7 @@ var builtinTemplates = []CardTemplate{
 		Foreground: "#2b1710",
 		Accent:     "#fff3cf",
 		Muted:      "#ffb07e",
-		FontFamily: fonts.FontMaShanZheng,
+		FontFamily: fonts.FontHarmonyOS,
 		FontWeight: 900,
 		Radius:     46,
 		TextBox: TextBoxSpec{
@@ -197,7 +197,7 @@ var builtinTemplates = []CardTemplate{
 		Foreground: "#3a3128",
 		Accent:     "#315d4f",
 		Muted:      "#c9bead",
-		FontFamily: fonts.FontLongCang,
+		FontFamily: fonts.FontHarmonyOS,
 		FontWeight: 700,
 		Radius:     18,
 		TextBox: TextBoxSpec{
@@ -214,7 +214,7 @@ var builtinTemplates = []CardTemplate{
 		Foreground: "#61253c",
 		Accent:     "#ff5790",
 		Muted:      "#efb7cb",
-		FontFamily: fonts.FontLongCang,
+		FontFamily: fonts.FontHarmonyOS,
 		FontWeight: 790,
 		Radius:     76,
 		TextBox: TextBoxSpec{
@@ -231,7 +231,7 @@ var builtinTemplates = []CardTemplate{
 		Foreground: "#181818",
 		Accent:     "#181818",
 		Muted:      "#d9d9d9",
-		FontFamily: fonts.FontZCOOLKuaiLe,
+		FontFamily: fonts.FontSong,
 		FontWeight: 700,
 		Radius:     12,
 		Frame:      "#181818",

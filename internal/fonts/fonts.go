@@ -19,19 +19,13 @@ var fontFS embed.FS
 type FontFamily string
 
 const (
-	FontZCOOLXiaoWei        FontFamily = "ZCOOL XiaoWei"
-	FontMaShanZheng         FontFamily = "Ma Shan Zheng"
-	FontZCOOLKuaiLe         FontFamily = "ZCOOL KuaiLe"
-	FontLongCang            FontFamily = "Long Cang"
-	FontZCOOLQingKeHuangYou FontFamily = "ZCOOL QingKe HuangYou"
+	FontHarmonyOS FontFamily = "HarmonyOS Sans"
+	FontSong      FontFamily = "Song"
 )
 
 var familyFilenames = map[FontFamily]string{
-	FontZCOOLXiaoWei:        "ZCOOLXiaoWei-Regular.ttf",
-	FontMaShanZheng:         "MaShanZheng-Regular.ttf",
-	FontZCOOLKuaiLe:         "ZCOOLKuaiLe-Regular.ttf",
-	FontLongCang:            "LongCang-Regular.ttf",
-	FontZCOOLQingKeHuangYou: "ZCOOLQingKeHuangYou-Regular.ttf",
+	FontHarmonyOS: "HarmonyOS_Sans_SC.ttf",
+	FontSong:      "Simsun.ttf",
 }
 
 type Library struct {

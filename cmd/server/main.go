@@ -57,10 +57,10 @@ func vipsLogHandler(messageDomain string, messageLevel vips.LogLevel, message st
 }
 
 func main() {
+	initLog()
 	if err := godotenv.Load(); err != nil {
 		log.Info().Msg("No .env file found, using environment variables")
 	}
-	initLog()
 	vips.LoggingSettings(vipsLogHandler, vips.LogLevelInfo)
 	vips.Startup(nil)
 	defer vips.Shutdown()
