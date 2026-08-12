@@ -56,9 +56,9 @@ jobs:
           version: 1.0
 
       - name: Build Linux binary
-        run: go build -trimpath -ldflags="-s -w" -o /out/blue-card-render ./cmd/server
+        run: go build -trimpath -ldflags="-s -w" -o /tmp/blue-card-render ./cmd/server
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
         with:
-          files: /out/blue-card-render
+          files: /tmp/blue-card-render
